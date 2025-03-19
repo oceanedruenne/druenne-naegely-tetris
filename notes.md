@@ -39,6 +39,9 @@
     - Touche **S** et **Down_Arrow** : Réduction de l'intervalle de descente d'un bloc tant que la touche est pressée
     - Touche **Escape** : Fermeture de la fenêtre de jeu
 
+- Condition de perte
+    - Un des carrés de la pièce placée dépasse de l'écran 
+
 
 ### Déplacement et rotation d'une pièce
 
@@ -55,9 +58,3 @@
     - La rotation est effectuée directement dans le tableau contenant la pièce
         - Il faut garder en mémoire vive un indice de rotation (pour revenir en arrière si mouvement invalide), ou deux versions de la pièce (position courante et après rotation)
         - Lors de la vérification de validité d'une position, calculer les positions occupées par les cubes uniques de la pièce en fonction de son haut gauche (origine de la pièce) et des chiffres dans le tableau de la pièce
-
-- Condition de perte
-    - Un des carrés de la pièce placée dépasse de l'écran 
-
-
-
