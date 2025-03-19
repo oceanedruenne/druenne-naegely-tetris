@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/TETRIS.dir/src/main.c.o -o ../bin/TETRIS 
