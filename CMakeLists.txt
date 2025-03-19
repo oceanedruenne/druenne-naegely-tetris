@@ -13,7 +13,7 @@ set(SOURCES
     # src/Game.c
     # src/Game.h
     # src/Tetromino.c
-    # src/Tetromino.h
+    src/Tetromino.h
     # src/Board.c
     # src/Board.h
 )
