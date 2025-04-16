@@ -6,10 +6,6 @@ struct coords { int x; int y; };
 typedef struct Tetromino {
   int shape[4][4];
   char type;
-  int r;
-  int g;
-  int b;
-  int a;
   struct coords position;
 } Tetromino;
 
@@ -23,10 +19,32 @@ typedef struct TetrominoCollection {
   struct Tetromino Z;
 } TetrominoCollection;
 
+typedef struct TetrominoColor {
+  int r;
+  int g;
+  int b;
+  int a;
+} TetrominoColor;
+
+typedef struct TetrominoColorCollection {
+  struct TetrominoColor I;
+  struct TetrominoColor J;
+  struct TetrominoColor L;
+  struct TetrominoColor O;
+  struct TetrominoColor S;
+  struct TetrominoColor T;
+  struct TetrominoColor Z;
+} TetrominoColorCollection;
+
+
 TetrominoCollection initTetrominoCollection();
+
+TetrominoColorCollection initTetrominoColorCollection();
 
 Tetromino getRandomTetromino(TetrominoCollection* collection);
 
 void printTetromino(Tetromino tetromino);
+
+TetrominoColor getTetrominoColor(int color_number);
 
 
