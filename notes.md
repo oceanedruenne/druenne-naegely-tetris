@@ -1,11 +1,11 @@
 # Projet Tetris - notes : 
 
-## Process 
+## Fonctionnement de SDL
 
-- Récupérer les différentes pièces dans une image bitmap
-
-- WIP...
-
+- Dessin du board avec un Renderer
+- Avoir un tableau 2D qui représente le board sans la pièce en cours
+- Fonction qui permet de dessiner une pièce à des coordonnées données
+- Fonction qui permet d'updater le board 
 
 
 ## Règles du jeu
