@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "../bin/TETRIS"
   "../bin/TETRIS.pdb"
+  "CMakeFiles/TETRIS.dir/src/Tetromino.c.o"
+  "CMakeFiles/TETRIS.dir/src/Tetromino.c.o.d"
   "CMakeFiles/TETRIS.dir/src/main.c.o"
   "CMakeFiles/TETRIS.dir/src/main.c.o.d"
 )

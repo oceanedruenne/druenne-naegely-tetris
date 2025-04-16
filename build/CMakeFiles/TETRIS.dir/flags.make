@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src
+C_INCLUDES = -I/usr/include/SDL2 -I/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src
 
 C_FLAGS = 
 
