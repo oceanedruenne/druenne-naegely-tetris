@@ -17,6 +17,7 @@ struct coords starting_position = {3 * BLOC_SIZE, 0 * BLOC_SIZE};
 
 int game_board[NB_BLOCS_H][NB_BLOCS_W] = {0};
 TetrominoCollection tetrominos;
+TetrominoColorCollection tetrominos_color;
 
 Uint64 prev, now; // timers
 double delta_t;  // durée frame en ms
@@ -30,33 +31,11 @@ void init()
 	window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	tetrominos = initTetrominoCollection();
+	tetrominos_color = initTetrominoColorCollection();
 }
 
-void draw_tetromino(SDL_Renderer *renderer)
-{
-	Tetromino test = getRandomTetromino(&tetrominos);
-	printTetromino(test);
-	SDL_SetRenderDrawColor(renderer, test.r, test.g, test.b, test.a); // Red color
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			if (test.shape[i][j] == 1) {
-				SDL_Rect bloc_to_draw = { starting_position.x + j * BLOC_SIZE, starting_position.y + i * BLOC_SIZE, BLOC_SIZE, BLOC_SIZE };
-				SDL_RenderFillRect(renderer, &bloc_to_draw);
-			}
-		}
-	}
-	SDL_RenderPresent(renderer);
-}
-
-// fonction qui met à jour la surface de la fenetre
-void draw(SDL_Renderer *renderer)
-{
-	
-}
-
-void draw_grid(SDL_Renderer *renderer)
-{
-	printf("drawing\n");
+void init_grid(SDL_Renderer *renderer) {
+	printf("Initiating grid visuals\n");
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
 	SDL_RenderClear(renderer);
@@ -67,13 +46,31 @@ void draw_grid(SDL_Renderer *renderer)
     for (int j = 0; j < WINDOW_WIDTH; j++) {
         SDL_RenderDrawLine(renderer, j * BLOC_SIZE, 0, j * BLOC_SIZE, WINDOW_HEIGHT * BLOC_SIZE);
     }
+}
 
-	SDL_RenderPresent(renderer);
+void draw_tetrominos(SDL_Renderer *renderer)
+{
+	for (size_t i = 0; i < NB_BLOCS_H - 1; i++)
+	{
+		for (size_t j = 0; j < NB_BLOCS_W - 1; j++)
+		{
+			if (game_board[i][j] != 0) {
+				const TetrominoColor draw_color = getTetrominoColor(game_board[i][j]);
+				SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a);
+				SDL_Rect bloc_to_draw = { starting_position.x + j * BLOC_SIZE, starting_position.y + i * BLOC_SIZE, BLOC_SIZE, BLOC_SIZE };
+				SDL_RenderFillRect(renderer, &bloc_to_draw);
+			}
+		}
+	}
+}
 
-	// TEST
-	draw_tetromino(renderer);
-	SDL_RenderPresent(renderer);
-	// SDL_Delay(1000);
+// fonction qui met à jour la surface de la fenetre
+void draw_grid(SDL_Renderer *renderer)
+{
+	printf("Updating grid visuals...\n");
+
+	init_grid(renderer);
+	draw_tetrominos(renderer);
 }
 
 int main(int argc, char** argv)
@@ -84,7 +81,13 @@ int main(int argc, char** argv)
     }
 
 	init();
-	draw_grid(renderer);
+	init_grid(renderer);
+	SDL_RenderPresent(renderer);
+
+	// TEST
+	game_board[5][5] = 1;
+	game_board[5][6] = 2;
+	// FIN TEST
     
 	bool quit = false;
 	while (!quit)
@@ -120,10 +123,13 @@ int main(int argc, char** argv)
 		prev = now;
 		now = SDL_GetPerformanceCounter();
 		delta_t = (double)((now - prev) * 1000 / (double)SDL_GetPerformanceFrequency());
-		// Use this call to draw() in order to update the window
-		// draw(renderer);
-		SDL_UpdateWindowSurface(window); 
+		// Use this call to draw_grid(renderer) in order to update the window
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    	SDL_RenderClear(renderer);
 
+		draw_grid(renderer);
+		SDL_RenderPresent(renderer);
+		// SDL_UpdateWindowSurface(window); 
 	}
 
     SDL_DestroyRenderer(renderer);
