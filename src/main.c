@@ -1,212 +1,139 @@
-#define _POSIX_C_SOURCE 199309L
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
-#include <sys/select.h>
+#include <stdbool.h>
 #include <time.h>
-#include <string.h>
+#include "Tetromino.h"
 
-#define ROW 15
-#define COLUMN 10
+// This file will contain the main function and the game loop for the Tetris, (it may still contain bits of inspired code from an arkanoid game)
 
-char getchNonBloquant() {
-    struct termios oldt, newt;
-    char ch = 0;
+#define BLOC_SIZE 20
+#define NB_BLOCS_W 10
+#define NB_BLOCS_H 21
+#define WINDOW_WIDTH (NB_BLOCS_W * (BLOC_SIZE) - 1)
+#define WINDOW_HEIGHT (NB_BLOCS_H * (BLOC_SIZE) - 1)
 
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+struct coords starting_position = {3 * BLOC_SIZE, 0 * BLOC_SIZE};
 
-    struct timeval tv = {0L, 0L};
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
+int game_board[NB_BLOCS_H][NB_BLOCS_W] = {0};
+TetrominoCollection tetrominos;
+TetrominoColorCollection tetrominos_color;
 
-    if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0) {
-        read(STDIN_FILENO, &ch, 1);
+Uint64 prev, now; // timers
+double delta_t;  // durée frame en ms
+bool quit = false;
+
+SDL_Window* window;
+SDL_Renderer *renderer;
+
+void init()
+{
+	window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+	tetrominos = initTetrominoCollection();
+	tetrominos_color = initTetrominoColorCollection();
+}
+
+void init_grid(SDL_Renderer *renderer) {
+	printf("Initiating grid visuals\n");
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
+	SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  // White grid borders
+    for (int i = 0; i < WINDOW_HEIGHT; i++) {
+        SDL_RenderDrawLine(renderer, 0, i * BLOC_SIZE, WINDOW_WIDTH * BLOC_SIZE, i * BLOC_SIZE);
+    }
+    for (int j = 0; j < WINDOW_WIDTH; j++) {
+        SDL_RenderDrawLine(renderer, j * BLOC_SIZE, 0, j * BLOC_SIZE, WINDOW_HEIGHT * BLOC_SIZE);
+    }
+}
+
+void draw_tetrominos(SDL_Renderer *renderer)
+{
+	for (size_t i = 0; i < NB_BLOCS_H - 1; i++)
+	{
+		for (size_t j = 0; j < NB_BLOCS_W - 1; j++)
+		{
+			if (game_board[i][j] != 0) {
+				const TetrominoColor draw_color = getTetrominoColor(game_board[i][j]);
+				SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a);
+				SDL_Rect bloc_to_draw = { starting_position.x + j * BLOC_SIZE, starting_position.y + i * BLOC_SIZE, BLOC_SIZE, BLOC_SIZE };
+				SDL_RenderFillRect(renderer, &bloc_to_draw);
+			}
+		}
+	}
+}
+
+// fonction qui met à jour la surface de la fenetre
+void draw_grid(SDL_Renderer *renderer)
+{
+	printf("Updating grid visuals...\n");
+
+	init_grid(renderer);
+	draw_tetrominos(renderer);
+}
+
+int main(int argc, char** argv)
+{
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Initialize SDL: %s", SDL_GetError());
+        return EXIT_FAILURE;
     }
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return ch;
-}
+	init();
+	init_grid(renderer);
+	SDL_RenderPresent(renderer);
 
-void afficherGrille(int grid[ROW][COLUMN]) {
-    printf("\033[H\033[J");
-    for (int i = 0; i < ROW; i++) {
-        for (int j = 0; j < COLUMN; j++) {
-            if (grid[i][j] == 0)
-                printf(". ");
-            else
-                printf("%d ", grid[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-int peutPlacer(int piece[3][3], int startX, int startY, int grilleFixe[ROW][COLUMN]) {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (piece[i][j] != 0) {
-                int x = startX + i;
-                int y = startY + j;
-                if (x < 0 || x >= ROW || y < 0 || y >= COLUMN)
-                    return 0;
-                if (grilleFixe[x][y] != 0)
-                    return 0;
-            }
-        }
-    }
-    return 1;
-}
-
-void placerPiece(int grid[ROW][COLUMN], int grilleFixe[ROW][COLUMN], int piece[3][3], int startX, int startY) {
-    for (int i = 0; i < ROW; i++)
-        for (int j = 0; j < COLUMN; j++)
-            grid[i][j] = grilleFixe[i][j];
-
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            if (piece[i][j] != 0)
-                grid[startX + i][startY + j] = piece[i][j];
-}
-
-void figerPiece(int grilleFixe[ROW][COLUMN], int piece[3][3], int startX, int startY) {
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            if (piece[i][j] != 0)
-                grilleFixe[startX + i][startY + j] = piece[i][j];
-}
-
-void effacerLignes(int grilleFixe[ROW][COLUMN]) {
-    for (int i = ROW - 1; i >= 0; i--) {
-        int pleine = 1;
-        for (int j = 0; j < COLUMN; j++) {
-            if (grilleFixe[i][j] == 0) {
-                pleine = 0;
+	// TEST
+	game_board[5][5] = 1;
+	game_board[5][6] = 2;
+	// FIN TEST
+    
+	bool quit = false;
+	while (!quit)
+	{
+		SDL_Event event;
+		while (!quit && SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+			case SDL_QUIT:
+				quit = true;
+				break;
+			// case SDL_KEYDOWN:
+			// 	switch (event.key.keysym.sym)
+			// 	{
+			// 		// touche clavier
+			// 		case SDLK_LEFT:  x_vault -= 10; break;
+			// 		case SDLK_RIGHT: x_vault +=10; break;
+			// 		case SDLK_ESCAPE: quit = true; break;
+			// 		default: break;
+			// 	}
+			// 	break;
+			// case SDL_MOUSEMOTION:	
+            //     x_vault += event.motion.xrel;
+            //     break;
+			// case SDL_MOUSEBUTTONDOWN:
+			// 	printf("mouse click %d\n", event.button.button);
+				// break;
+			default: 
                 break;
-            }
-        }
-        if (pleine) {
-            for (int k = i; k > 0; k--) {
-                for (int j = 0; j < COLUMN; j++) {
-                    grilleFixe[k][j] = grilleFixe[k - 1][j];
-                }
-            }
-            for (int j = 0; j < COLUMN; j++)
-                grilleFixe[0][j] = 0;
-            i++; // Revérifier la ligne actuelle après décalage
-        }
-    }
-}
+			}
+		}
+		prev = now;
+		now = SDL_GetPerformanceCounter();
+		delta_t = (double)((now - prev) * 1000 / (double)SDL_GetPerformanceFrequency());
+		// Use this call to draw_grid(renderer) in order to update the window
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    	SDL_RenderClear(renderer);
 
-void genererNouvellePiece(int piece[3][3], int *startX, int *startY) {
-    int type = rand() % 5;
-    int nouvelle[3][3] = {0};
+		draw_grid(renderer);
+		SDL_RenderPresent(renderer);
+		// SDL_UpdateWindowSurface(window); 
+	}
 
-    switch (type) {
-        case 0: {
-            int s[3][3] = {{0, 0, 0}, {0, 5, 5}, {5, 5, 0}};
-            memcpy(nouvelle, s, sizeof(s));
-            break;
-        }
-        case 1: {
-            int z[3][3] = {{0, 0, 0}, {7, 7, 0}, {0, 7, 7}};
-            memcpy(nouvelle, z, sizeof(z));
-            break;
-        }
-        case 2: {
-            int t[3][3] = {{0, 0, 0}, {6, 6, 6}, {0, 6, 0}};
-            memcpy(nouvelle, t, sizeof(t));
-            break;
-        }
-        case 3: {
-            int j[3][3] = {{0, 0, 0}, {2, 2, 2}, {0, 0, 2}};
-            memcpy(nouvelle, j, sizeof(j));
-            break;
-        }
-        case 4: {
-            int l[3][3] = {{0, 0, 0}, {3, 3, 3}, {3, 0, 0}};
-            memcpy(nouvelle, l, sizeof(l));
-            break;
-        }
-    }
-
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            piece[i][j] = nouvelle[i][j];
-
-    *startX = 0;
-    *startY = 3;
-}
-
-int main() {
-    srand(time(NULL));
-
-    int grid[ROW][COLUMN] = {0};
-    int grilleFixe[ROW][COLUMN] = {0};
-
-    int piece[3][3];
-    int startX, startY;
-    genererNouvellePiece(piece, &startX, &startY);
-
-    if (!peutPlacer(piece, startX, startY, grilleFixe)) {
-        printf("Game Over !\n");
-        return 0;
-    }
-
-    struct timespec lastUpdate;
-    clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
-
-    while (1) {
-        char input = getchNonBloquant();
-
-        if (input == 'd' && peutPlacer(piece, startX, startY + 1, grilleFixe)) {
-            startY++;
-        } else if (input == 'q' && peutPlacer(piece, startX, startY - 1, grilleFixe)) {
-            startY--;
-        } else if (input == 's' && peutPlacer(piece, startX + 1, startY, grilleFixe)) {
-            startX++;
-        } else if (input == 'x') {
-            int temp[3][3];
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    temp[j][2 - i] = piece[i][j];
-
-            if (peutPlacer(temp, startX, startY, grilleFixe)) {
-                for (int i = 0; i < 3; i++)
-                    for (int j = 0; j < 3; j++)
-                        piece[i][j] = temp[i][j];
-            }
-        } else if (input == 'b') {
-            break;
-        }
-
-        struct timespec now;
-        clock_gettime(CLOCK_MONOTONIC, &now);
-        double elapsed = (now.tv_sec - lastUpdate.tv_sec) + (now.tv_nsec - lastUpdate.tv_nsec) / 1e9;
-
-        if (elapsed >= 0.5) {
-            if (peutPlacer(piece, startX + 1, startY, grilleFixe)) {
-                startX++;
-            } else {
-                figerPiece(grilleFixe, piece, startX, startY);
-                effacerLignes(grilleFixe);
-                genererNouvellePiece(piece, &startX, &startY);
-                if (!peutPlacer(piece, startX, startY, grilleFixe)) {
-                    afficherGrille(grid);
-                    printf("Game Over !\n");
-                    break;
-                }
-            }
-            lastUpdate = now;
-        }
-
-        placerPiece(grid, grilleFixe, piece, startX, startY);
-        afficherGrille(grid);
-        usleep(50 * 1000);
-    }
-
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     return 0;
 }

@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/Tetromino.c" "CMakeFiles/TETRIS.dir/src/Tetromino.c.o" "gcc" "CMakeFiles/TETRIS.dir/src/Tetromino.c.o.d"
   "/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/main.c" "CMakeFiles/TETRIS.dir/src/main.c.o" "gcc" "CMakeFiles/TETRIS.dir/src/main.c.o.d"
   )
 

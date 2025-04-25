@@ -129,6 +129,30 @@ TETRIS/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/build
 .PHONY : TETRIS/fast
 
+src/Tetromino.o: src/Tetromino.c.o
+.PHONY : src/Tetromino.o
+
+# target to build an object file
+src/Tetromino.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/Tetromino.c.o
+.PHONY : src/Tetromino.c.o
+
+src/Tetromino.i: src/Tetromino.c.i
+.PHONY : src/Tetromino.i
+
+# target to preprocess a source file
+src/Tetromino.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/Tetromino.c.i
+.PHONY : src/Tetromino.c.i
+
+src/Tetromino.s: src/Tetromino.c.s
+.PHONY : src/Tetromino.s
+
+# target to generate assembly for a file
+src/Tetromino.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/Tetromino.c.s
+.PHONY : src/Tetromino.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -162,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... TETRIS"
+	@echo "... src/Tetromino.o"
+	@echo "... src/Tetromino.i"
+	@echo "... src/Tetromino.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
