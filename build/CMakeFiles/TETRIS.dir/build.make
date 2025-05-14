@@ -83,33 +83,49 @@ CMakeFiles/TETRIS.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TETRIS.dir/src/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/main.c -o CMakeFiles/TETRIS.dir/src/main.c.s
 
-CMakeFiles/TETRIS.dir/src/Tetromino.c.o: CMakeFiles/TETRIS.dir/flags.make
-CMakeFiles/TETRIS.dir/src/Tetromino.c.o: ../src/Tetromino.c
-CMakeFiles/TETRIS.dir/src/Tetromino.c.o: CMakeFiles/TETRIS.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/TETRIS.dir/src/Tetromino.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/TETRIS.dir/src/Tetromino.c.o -MF CMakeFiles/TETRIS.dir/src/Tetromino.c.o.d -o CMakeFiles/TETRIS.dir/src/Tetromino.c.o -c /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/Tetromino.c
+CMakeFiles/TETRIS.dir/src/tetromino.c.o: CMakeFiles/TETRIS.dir/flags.make
+CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c
+CMakeFiles/TETRIS.dir/src/tetromino.c.o: CMakeFiles/TETRIS.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/TETRIS.dir/src/tetromino.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/TETRIS.dir/src/tetromino.c.o -MF CMakeFiles/TETRIS.dir/src/tetromino.c.o.d -o CMakeFiles/TETRIS.dir/src/tetromino.c.o -c /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.c
 
-CMakeFiles/TETRIS.dir/src/Tetromino.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TETRIS.dir/src/Tetromino.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/Tetromino.c > CMakeFiles/TETRIS.dir/src/Tetromino.c.i
+CMakeFiles/TETRIS.dir/src/tetromino.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TETRIS.dir/src/tetromino.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.c > CMakeFiles/TETRIS.dir/src/tetromino.c.i
 
-CMakeFiles/TETRIS.dir/src/Tetromino.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TETRIS.dir/src/Tetromino.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/Tetromino.c -o CMakeFiles/TETRIS.dir/src/Tetromino.c.s
+CMakeFiles/TETRIS.dir/src/tetromino.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TETRIS.dir/src/tetromino.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.c -o CMakeFiles/TETRIS.dir/src/tetromino.c.s
+
+CMakeFiles/TETRIS.dir/src/tetris_logic.c.o: CMakeFiles/TETRIS.dir/flags.make
+CMakeFiles/TETRIS.dir/src/tetris_logic.c.o: ../src/tetris_logic.c
+CMakeFiles/TETRIS.dir/src/tetris_logic.c.o: CMakeFiles/TETRIS.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/TETRIS.dir/src/tetris_logic.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/TETRIS.dir/src/tetris_logic.c.o -MF CMakeFiles/TETRIS.dir/src/tetris_logic.c.o.d -o CMakeFiles/TETRIS.dir/src/tetris_logic.c.o -c /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetris_logic.c
+
+CMakeFiles/TETRIS.dir/src/tetris_logic.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TETRIS.dir/src/tetris_logic.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetris_logic.c > CMakeFiles/TETRIS.dir/src/tetris_logic.c.i
+
+CMakeFiles/TETRIS.dir/src/tetris_logic.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TETRIS.dir/src/tetris_logic.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetris_logic.c -o CMakeFiles/TETRIS.dir/src/tetris_logic.c.s
 
 # Object files for target TETRIS
 TETRIS_OBJECTS = \
 "CMakeFiles/TETRIS.dir/src/main.c.o" \
-"CMakeFiles/TETRIS.dir/src/Tetromino.c.o"
+"CMakeFiles/TETRIS.dir/src/tetromino.c.o" \
+"CMakeFiles/TETRIS.dir/src/tetris_logic.c.o"
 
 # External object files for target TETRIS
 TETRIS_EXTERNAL_OBJECTS =
 
 ../bin/TETRIS: CMakeFiles/TETRIS.dir/src/main.c.o
-../bin/TETRIS: CMakeFiles/TETRIS.dir/src/Tetromino.c.o
+../bin/TETRIS: CMakeFiles/TETRIS.dir/src/tetromino.c.o
+../bin/TETRIS: CMakeFiles/TETRIS.dir/src/tetris_logic.c.o
 ../bin/TETRIS: CMakeFiles/TETRIS.dir/build.make
 ../bin/TETRIS: CMakeFiles/TETRIS.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable ../bin/TETRIS"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable ../bin/TETRIS"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TETRIS.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

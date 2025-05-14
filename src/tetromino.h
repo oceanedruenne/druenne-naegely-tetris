@@ -1,12 +1,15 @@
+#ifndef TETROMINO_H
+#define TETROMINO_H
+
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
 struct coords { int x; int y; };
 
 typedef struct Tetromino {
   int shape[4][4];
   char type;
-  struct coords position;
 } Tetromino;
 
 typedef struct TetrominoCollection {
@@ -47,4 +50,4 @@ void printTetromino(Tetromino tetromino);
 
 TetrominoColor getTetrominoColor(int color_number);
 
-
+#endif
