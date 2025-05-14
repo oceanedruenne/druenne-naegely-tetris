@@ -16,12 +16,10 @@ include_directories(${SDL2_INCLUDE_DIRS})
 # Defining the sources
 set(SOURCES
     src/main.c
-    src/Tetromino.c
-    src/Tetromino.h
-    # src/Game.c
-    # src/Game.h
-    # src/Board.c
-    # src/Board.h
+    src/tetromino.c
+    src/tetromino.h
+    src/tetris_logic.c
+    src/tetris_logic.h
 )
 
 # Include directories
