@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/TETRIS.dir/src/main.c.o -o ../bin/TETRIS 
+/usr/bin/cc CMakeFiles/TETRIS.dir/src/main.c.o CMakeFiles/TETRIS.dir/src/Tetromino.c.o -o ../bin/TETRIS  -L/usr/lib/x86_64-linux-gnu  -lSDL2 

@@ -1,5 +1,13 @@
 # Projet Tetris - notes : 
 
+## Fonctionnement de SDL
+
+- Dessin du board avec un Renderer
+- Avoir un tableau 2D qui représente le board sans la pièce en cours
+- Fonction qui permet de dessiner une pièce à des coordonnées données
+- Fonction qui permet d'updater le board 
+
+
 ## Règles du jeu
 
 - Plateau de dimensions 10*40 blocs, mais on ne laisse apparaître que 20 blocs verticaux
