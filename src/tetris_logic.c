@@ -7,6 +7,7 @@
 #include <time.h>
 #include <string.h>
 #include <ncurses.h>
+#include "AITetrisPlayer.h"
 
 
 #define ROW 15
@@ -283,5 +284,7 @@ int main() {
         placeTetromino(grid, fixedGrid, tetromino, startX, startY);
         displayGrid(grid); // Display the updated grid
         usleep(50 * 1000);
+
+        //tetris_ai_play(grid,tetromino);
     }
 }

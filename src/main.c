@@ -64,7 +64,7 @@ void draw_tetrominos(SDL_Renderer *renderer)
 	}
 }
 
-// fonction qui met à jour la surface de la fenetre
+// Fonction qui met à jour la surface de la fenêtre
 void draw_grid(SDL_Renderer *renderer)
 {
 	printf("Updating grid visuals...\n");
