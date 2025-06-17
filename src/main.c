@@ -121,9 +121,9 @@ int main(int argc, char** argv)
 
 	init();
 
-    font = TTF_OpenFont("assets/font.ttf", 24);
+    font = TTF_OpenFont("../assets/font.ttf", 24);
     if (font == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load font: assets/font.ttf : %s", TTF_GetError());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load font: ../assets/font.ttf : %s", TTF_GetError());
         return EXIT_FAILURE;
     }
 
