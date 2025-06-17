@@ -162,6 +162,7 @@ CMakeFiles/TETRIS.dir/src/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/SDL2/SDL_ttf.h /usr/include/SDL2/SDL.h \
  /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetris_logic.h \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \

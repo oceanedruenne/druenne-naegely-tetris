@@ -200,6 +200,8 @@ CMakeFiles/TETRIS.dir/src/main.c.o: ../src/main.c \
   /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+  /usr/include/SDL2/SDL_ttf.h \
+  /usr/include/SDL2/SDL.h \
   ../src/tetris_logic.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
@@ -382,6 +384,8 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
 ../src/tetris_logic.h:
+
+/usr/include/SDL2/SDL_ttf.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
