@@ -107,7 +107,8 @@ void freezeTetromino(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W], Tetromino tetromino,
 }
 
 // Function that deletes complete grid lines
-void clearLines(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]) {
+int clearLines(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]) {
+    int cleared_lines = 0;
     for (int i = NB_BLOCS_H - 1; i >= 0; i--) {
         int full = 1;
 
@@ -121,6 +122,7 @@ void clearLines(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]) {
 
         // If the line is full, move it downwards
         if (full) {
+            cleared_lines++;
             for (int k = i; k > 0; k--) {
                 for (int j = 0; j < NB_BLOCS_W; j++) {
                     fixedGrid[k][j] = fixedGrid[k - 1][j];
@@ -133,6 +135,24 @@ void clearLines(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]) {
             }
 
             i++; 
+        }
+    }
+    return cleared_lines;
+}
+
+void init_game_state(GameState *state) {
+    state->level = 1;
+    state->total_lines_cleared = 0;
+    state->lines_cleared_for_level = 0;
+}
+
+void update_game_state(GameState *state, int cleared_lines) {
+    if (cleared_lines > 0) {
+        state->total_lines_cleared += cleared_lines;
+        state->lines_cleared_for_level += cleared_lines;
+        if (state->lines_cleared_for_level >= 10) {
+            state->level++;
+            state->lines_cleared_for_level -= 10;
         }
     }
 }
