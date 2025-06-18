@@ -1,119 +1,147 @@
 #include "AITetrisPlayer.h"
-#include <limits.h>
 #include <string.h>
-#include "Tetromino.h"
 
+#define ROW 15
+#define COLUMN 10
 
-typedef struct {
-    int x;
-    int rotation;
-    int score;
-} Move;
+// Evaluate the position of the tetromino
+int evaluatePosition(int testGrid[ROW][COLUMN]) {
+    int score = 0; // Score to determine whether the tetromino is in the right place or not
 
-void copy_grid(int dest[ROW][COLUMN], int src[ROW][COLUMN]) {
-    for (int y = 0; y < ROW; y++)
-        for (int x = 0; x < COLUMN; x++)
-            dest[y][x] = src[y][x];
-}
-
-void apply_tetromino(int grid[ROW][COLUMN], Tetromino *t) {
-    for (int i = 0; i < 4; i++) {
-        int x = t->blocks[i].x;
-        int y = t->blocks[i].y;
-        if (x >= 0 && x < COLUMN && y >= 0 && y < ROW) {
-            grid[y][x] = t->type;
-        }
-    }
-}
-
-int evaluate_grid(int grid[ROW][COLUMN]) {
-    int score = 0;
-    int aggregate_ROW = 0;
-    int holes = 0;
-    int complete_lines = 0;
-
-    for (int x = 0; x < COLUMN; x++) {
-        int found_block = 0;
-        for (int y = 0; y < ROW; y++) {
-            if (grid[y][x]) {
-                if (!found_block) {
-                    aggregate_ROW += ROW - y;
-                    found_block = 1;
-                }
-            } else if (found_block) {
-                holes++;
-            }
-        }
-    }
-
-    for (int y = 0; y < ROW; y++) {
+    // Bonus for each complete line
+    for (int i = 0; i < ROW; i++) {
         int full = 1;
-        for (int x = 0; x < COLUMN; x++) {
-            if (!grid[y][x]) {
+
+        for (int j = 0; j < COLUMN; j++) {
+            if (testGrid[i][j] == 0) {
                 full = 0;
                 break;
             }
         }
-        if (full) complete_lines++;
+
+        if (full) {
+            score -= 1000; // More weight here
+        }
     }
 
-    return complete_lines * 100 - aggregate_ROW * 4 - holes * 20;
+    // Height penalty (we want to stack as low as possible)
+    for (int j = 0; j < COLUMN; j++) {
+        for (int i = 0; i < ROW; i++) {
+            if (testGrid[i][j] != 0) {
+                score += (ROW - i) * 2; // Lower = better
+                break;
+            }
+        }
+    }
+
+    // Penalty for holes (empty space under a block)
+    for (int j = 0; j < COLUMN; j++) {
+        int seenBlock = 0;
+
+        for (int i = 0; i < ROW; i++) {
+            if (testGrid[i][j] != 0) {
+                seenBlock = 1;
+            } else if (seenBlock) {
+                score += 50; // Big penalty for a hole
+            }
+        }
+    }
+
+    return score;
 }
 
-void tetris_ai_play(int grid[ROW][COLUMN], Tetromino *current) {
-    Move best_move = { .x = current->position.x, .rotation = current->rotation, .score = INT_MIN };
+// Try to place a tetromino in a position
+int tryPlace(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+    
+    int testGrid[ROW][COLUMN];
+    memcpy(testGrid, fixedGrid, sizeof(testGrid));
 
-    Tetromino temp;
-    int sim[ROW][COLUMN];
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (tetromino[i][j] != 0) {
+                int xx = x + i;
+                int yy = y + j;
 
-    for (int rot = 0; rot < 4; rot++) {
-        temp = *current;
-        temp.rotation = rot;
-        update_blocks(&temp);
-
-        int min_x = COLUMN, max_x = -1;
-        for (int i = 0; i < 4; i++) {
-            if (temp.blocks[i].x < min_x) min_x = temp.blocks[i].x;
-            if (temp.blocks[i].x > max_x) max_x = temp.blocks[i].x;
-        }
-
-        for (int x = -min_x; x < COLUMN - max_x; x++) {
-            temp = *current;
-            temp.rotation = rot;
-            temp.position.x = x;
-            temp.position.y = 0;
-            update_blocks(&temp);
-
-            // Tombe jusqu'à collision
-            while (!check_collision(grid, &temp)) {
-                temp.position.y++;
-                update_blocks(&temp);
-            }
-            temp.position.y--;
-            update_blocks(&temp);
-
-            if (check_collision(grid, &temp)) continue;
-
-            copy_grid(sim, grid);
-            apply_tetromino(sim, &temp);
-            int score = evaluate_grid(sim);
-
-            if (score > best_move.score) {
-                best_move.x = x;
-                best_move.rotation = rot;
-                best_move.score = score;
+                if (xx < 0 || xx >= ROW || yy < 0 || yy >= COLUMN || testGrid[xx][yy] != 0) {
+                    return 999999;
+                }
+                    
+                testGrid[xx][yy] = tetromino[i][j];
             }
         }
     }
 
-    current->rotation = best_move.rotation;
-    update_blocks(current);
-    current->position.x = best_move.x;
+    return evaluatePosition(testGrid);
+}
 
-    while (!check_collision(grid, current)) {
-        current->position.y++;
-        update_blocks(current);
+// Apply a clockwise rotation
+void rotateTetromino(int src[3][3], int dest[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            dest[j][2 - i] = src[i][j];
+        }
+    }     
+}
+
+// Check if AI can move down the tetromino or not
+int canMoveDown(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+    return (tryPlace(grid, fixedGrid, tetromino, x + 1, y) != 999999);
+}
+
+// Check if AI can move left the tetromino or not
+int canMoveLeft(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+    return (tryPlace(grid, fixedGrid, tetromino, x, y - 1) != 999999);
+}
+
+// Check if AI can move right the tetromino or not 
+int canMoveRight(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+    return (tryPlace(grid, fixedGrid, tetromino, x, y + 1) != 999999);
+}
+
+// Main function of AI
+char tetris_ai_play(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int *startX, int *startY) {
+    int bestScore = 999999;
+    int bestX = *startX;
+    int bestY = *startY;
+
+    int piece[3][3];
+    memcpy(piece, tetromino, sizeof(piece));
+
+    // Find effective width
+    int right = 0;
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            if (piece[i][j] != 0 && j > right) right = j;
+
+    // Test horizontal positions
+    for (int y = 0; y <= COLUMN - 1 - right; y++) {
+        int x = 0;
+        while (tryPlace(grid, fixedGrid, piece, x + 1, y) != 999999) x++;
+
+        int score = tryPlace(grid, fixedGrid, piece, x, y);
+        if (score < bestScore) {
+            bestScore = score;
+            bestX = x;
+            bestY = y;
+        }
     }
-    current->position.y--;
-    update_blocks(current);
+
+    // Horizontal movements if possible
+    if (*startY < bestY && canMoveRight(grid, fixedGrid, piece, *startX, *startY)) {
+        (*startY)++;
+        return 'd';
+    }
+    if (*startY > bestY && canMoveLeft(grid, fixedGrid, piece, *startX, *startY)) {
+        (*startY)--;
+        return 'q';
+    }
+
+    // Downhill if possible
+    if (*startX < bestX && canMoveDown(grid, fixedGrid, piece, *startX, *startY)) {
+        (*startX)++;
+        return 's';
+    }
+
+    // Otherwise, place the tetromino
+    return ' ';
 }

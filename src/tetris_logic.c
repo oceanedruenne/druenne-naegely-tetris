@@ -227,11 +227,14 @@ int main() {
     clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
 
     // Main game loop
-    while (1) {
+ while (1) {
 
+        // Appel à l'IA pour déterminer le mouvement à effectuer
+        char ia_move = tetris_ai_play(grid, fixedGrid, tetromino, &startX, &startY);
+        
+        /*
         char input = getNonBlockingKey();
         
-        // Move the tetromino according to the keys pressed
         if ((input == 'd' || input == CHAR_RIGHT) && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
             startY++;
         } else if ((input == 'q' || input == CHAR_LEFT) && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
@@ -256,6 +259,26 @@ int main() {
         } else if (input == 'b') {
             break;
         }
+        */
+
+        // Traitement des mouvements déterminés par l'IA
+        if (ia_move == 'd' && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
+            startY++;
+        } else if (ia_move == 'q' && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
+            startY--;
+        } else if (ia_move == 's' && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
+            startX++;
+        } else if (ia_move == 'x') {
+            int temp[3][3];
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    temp[j][2 - i] = tetromino[i][j];
+                }
+            }
+            if (canPlace(temp, startX, startY, fixedGrid)) {
+                memcpy(tetromino, temp, sizeof(temp));
+            }
+        }
 
         // Manage the tetromino's descent speed
         struct timespec now;
@@ -272,6 +295,7 @@ int main() {
 
                 // Check if the game is finished
                 if (!canPlace(tetromino, startX, startY, fixedGrid)) {
+                    placeTetromino(grid, fixedGrid, tetromino, startX, startY);
                     displayGrid(grid);
                     printf("Game Over !\n");
                     break;
@@ -284,7 +308,5 @@ int main() {
         placeTetromino(grid, fixedGrid, tetromino, startX, startY);
         displayGrid(grid); // Display the updated grid
         usleep(50 * 1000);
-
-        //tetris_ai_play(grid,tetromino);
     }
 }
