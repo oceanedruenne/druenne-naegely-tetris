@@ -7,6 +7,8 @@ typedef struct Tetromino {
   int shape[4][4];
   char type;
   struct coords position;
+  struct coords blocks[4];
+  int rotation;
 } Tetromino;
 
 typedef struct TetrominoCollection {

@@ -6,40 +6,55 @@
 #include <sys/select.h>
 #include <time.h>
 #include <string.h>
+#include <ncurses.h>
+#include "AITetrisPlayer.h"
+
 
 #define ROW 15
 #define COLUMN 10
+#define CHAR_DOWN  -2
+#define CHAR_LEFT  -3
+#define CHAR_RIGHT -4
 
 // Function for obtaining a key without blocking
 char getNonBlockingKey() {
     struct termios oldt, newt;
     char ch = 0;
+    char seq[3];
 
-    // Retrieving terminal parameters
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
     newt.c_lflag &= ~(ICANON | ECHO);
-
-    // Modification of the terminal to read it without blocking
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
     struct timeval tv = {0L, 0L};
     fd_set fds;
-
     FD_ZERO(&fds);
     FD_SET(STDIN_FILENO, &fds);
 
-    // Check whether a key has been pressed
     if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0) {
-        // Read the key that has been pressed
-        read(STDIN_FILENO, &ch, 1);
+        if (read(STDIN_FILENO, &seq[0], 1) == 1) {
+            if (seq[0] == '\033') { // début séquence
+                if (read(STDIN_FILENO, &seq[1], 1) == 1 &&
+                    read(STDIN_FILENO, &seq[2], 1) == 1) {
+                    if (seq[1] == '[') {
+                        switch (seq[2]) {
+                            case 'B': ch = CHAR_DOWN; break;
+                            case 'C': ch = CHAR_RIGHT; break;
+                            case 'D': ch = CHAR_LEFT; break;
+                        }
+                    }
+                }
+            } else {
+                ch = seq[0]; 
+            }
+        }
     }
 
-    // Restoring the terminal's initial settings
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-
     return ch;
 }
+
 
 // Function for displaying the game grid
 void displayGrid(int grid[ROW][COLUMN]) {
@@ -212,16 +227,19 @@ int main() {
     clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
 
     // Main game loop
-    while (1) {
+ while (1) {
 
+        // Appel à l'IA pour déterminer le mouvement à effectuer
+        char ia_move = tetris_ai_play(grid, fixedGrid, tetromino, &startX, &startY);
+        
+        /*
         char input = getNonBlockingKey();
         
-        // Move the tetromino according to the keys pressed
-        if (input == 'd' && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
+        if ((input == 'd' || input == CHAR_RIGHT) && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
             startY++;
-        } else if (input == 'q' && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
+        } else if ((input == 'q' || input == CHAR_LEFT) && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
             startY--;
-        } else if (input == 's' && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
+        } else if ((input == 's' || input == CHAR_DOWN) && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
             startX++;
         } else if (input == 'x') {
             int temp[3][3];
@@ -241,6 +259,26 @@ int main() {
         } else if (input == 'b') {
             break;
         }
+        */
+
+        // Traitement des mouvements déterminés par l'IA
+        if (ia_move == 'd' && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
+            startY++;
+        } else if (ia_move == 'q' && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
+            startY--;
+        } else if (ia_move == 's' && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
+            startX++;
+        } else if (ia_move == 'x') {
+            int temp[3][3];
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    temp[j][2 - i] = tetromino[i][j];
+                }
+            }
+            if (canPlace(temp, startX, startY, fixedGrid)) {
+                memcpy(tetromino, temp, sizeof(temp));
+            }
+        }
 
         // Manage the tetromino's descent speed
         struct timespec now;
@@ -257,6 +295,7 @@ int main() {
 
                 // Check if the game is finished
                 if (!canPlace(tetromino, startX, startY, fixedGrid)) {
+                    placeTetromino(grid, fixedGrid, tetromino, startX, startY);
                     displayGrid(grid);
                     printf("Game Over !\n");
                     break;
