@@ -22,6 +22,8 @@ set(SOURCES
     src/tetromino.h
     src/tetris_logic.c
     src/tetris_logic.h
+    src/AITetrisPlayer.c
+    src/AITetrisPlayer.h
 )
 
 include_directories(src)

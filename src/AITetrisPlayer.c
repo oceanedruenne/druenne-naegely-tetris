@@ -1,18 +1,15 @@
 #include "AITetrisPlayer.h"
 #include <string.h>
 
-#define ROW 15
-#define COLUMN 10
-
 // Evaluate the position of the tetromino
-int evaluatePosition(int testGrid[ROW][COLUMN]) {
+int evaluatePosition(int testGrid[NB_BLOCS_W][NB_BLOCS_H]) {
     int score = 0; // Score to determine whether the tetromino is in the right place or not
 
     // Bonus for each complete line
-    for (int i = 0; i < ROW; i++) {
+    for (int i = 0; i < NB_BLOCS_W; i++) {
         int full = 1;
 
-        for (int j = 0; j < COLUMN; j++) {
+        for (int j = 0; j < NB_BLOCS_H; j++) {
             if (testGrid[i][j] == 0) {
                 full = 0;
                 break;
@@ -25,20 +22,20 @@ int evaluatePosition(int testGrid[ROW][COLUMN]) {
     }
 
     // Height penalty (we want to stack as low as possible)
-    for (int j = 0; j < COLUMN; j++) {
-        for (int i = 0; i < ROW; i++) {
+    for (int j = 0; j < NB_BLOCS_H; j++) {
+        for (int i = 0; i < NB_BLOCS_W; i++) {
             if (testGrid[i][j] != 0) {
-                score += (ROW - i) * 2; // Lower = better
+                score += (NB_BLOCS_W - i) * 2; // Lower = better
                 break;
             }
         }
     }
 
     // Penalty for holes (empty space under a block)
-    for (int j = 0; j < COLUMN; j++) {
+    for (int j = 0; j < NB_BLOCS_H; j++) {
         int seenBlock = 0;
 
-        for (int i = 0; i < ROW; i++) {
+        for (int i = 0; i < NB_BLOCS_W; i++) {
             if (testGrid[i][j] != 0) {
                 seenBlock = 1;
             } else if (seenBlock) {
@@ -51,9 +48,9 @@ int evaluatePosition(int testGrid[ROW][COLUMN]) {
 }
 
 // Try to place a tetromino in a position
-int tryPlace(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+int tryPlace(int grid[NB_BLOCS_W][NB_BLOCS_H], int fixedGrid[NB_BLOCS_W][NB_BLOCS_H], int tetromino[3][3], int x, int y) {
     
-    int testGrid[ROW][COLUMN];
+    int testGrid[NB_BLOCS_W][NB_BLOCS_H];
     memcpy(testGrid, fixedGrid, sizeof(testGrid));
 
     for (int i = 0; i < 3; i++) {
@@ -62,7 +59,7 @@ int tryPlace(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3]
                 int xx = x + i;
                 int yy = y + j;
 
-                if (xx < 0 || xx >= ROW || yy < 0 || yy >= COLUMN || testGrid[xx][yy] != 0) {
+                if (xx < 0 || xx >= NB_BLOCS_W || yy < 0 || yy >= NB_BLOCS_H || testGrid[xx][yy] != 0) {
                     return 999999;
                 }
                     
@@ -84,22 +81,22 @@ void rotateTetromino(int src[3][3], int dest[3][3]) {
 }
 
 // Check if AI can move down the tetromino or not
-int canMoveDown(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+int canMoveDown(int grid[NB_BLOCS_W][NB_BLOCS_H], int fixedGrid[NB_BLOCS_W][NB_BLOCS_H], int tetromino[3][3], int x, int y) {
     return (tryPlace(grid, fixedGrid, tetromino, x + 1, y) != 999999);
 }
 
 // Check if AI can move left the tetromino or not
-int canMoveLeft(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+int canMoveLeft(int grid[NB_BLOCS_W][NB_BLOCS_H], int fixedGrid[NB_BLOCS_W][NB_BLOCS_H], int tetromino[3][3], int x, int y) {
     return (tryPlace(grid, fixedGrid, tetromino, x, y - 1) != 999999);
 }
 
 // Check if AI can move right the tetromino or not 
-int canMoveRight(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int x, int y) {
+int canMoveRight(int grid[NB_BLOCS_W][NB_BLOCS_H], int fixedGrid[NB_BLOCS_W][NB_BLOCS_H], int tetromino[3][3], int x, int y) {
     return (tryPlace(grid, fixedGrid, tetromino, x, y + 1) != 999999);
 }
 
 // Main function of AI
-char tetris_ai_play(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetromino[3][3], int *startX, int *startY) {
+char tetris_ai_play(int grid[NB_BLOCS_W][NB_BLOCS_H], int fixedGrid[NB_BLOCS_W][NB_BLOCS_H], int tetromino[3][3], int *startX, int *startY) {
     int bestScore = 999999;
     int bestX = *startX;
     int bestY = *startY;
@@ -114,7 +111,7 @@ char tetris_ai_play(int grid[ROW][COLUMN], int fixedGrid[ROW][COLUMN], int tetro
             if (piece[i][j] != 0 && j > right) right = j;
 
     // Test horizontal positions
-    for (int y = 0; y <= COLUMN - 1 - right; y++) {
+    for (int y = 0; y <= NB_BLOCS_H - 1 - right; y++) {
         int x = 0;
         while (tryPlace(grid, fixedGrid, piece, x + 1, y) != 999999) x++;
 

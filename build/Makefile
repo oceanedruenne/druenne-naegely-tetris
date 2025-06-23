@@ -129,6 +129,30 @@ TETRIS/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/build
 .PHONY : TETRIS/fast
 
+src/AITetrisPlayer.o: src/AITetrisPlayer.c.o
+.PHONY : src/AITetrisPlayer.o
+
+# target to build an object file
+src/AITetrisPlayer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o
+.PHONY : src/AITetrisPlayer.c.o
+
+src/AITetrisPlayer.i: src/AITetrisPlayer.c.i
+.PHONY : src/AITetrisPlayer.i
+
+# target to preprocess a source file
+src/AITetrisPlayer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.i
+.PHONY : src/AITetrisPlayer.c.i
+
+src/AITetrisPlayer.s: src/AITetrisPlayer.c.s
+.PHONY : src/AITetrisPlayer.s
+
+# target to generate assembly for a file
+src/AITetrisPlayer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.s
+.PHONY : src/AITetrisPlayer.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -210,6 +234,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... TETRIS"
+	@echo "... src/AITetrisPlayer.o"
+	@echo "... src/AITetrisPlayer.i"
+	@echo "... src/AITetrisPlayer.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

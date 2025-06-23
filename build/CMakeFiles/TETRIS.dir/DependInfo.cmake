@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/AITetrisPlayer.c" "CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o" "gcc" "CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o.d"
   "/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/main.c" "CMakeFiles/TETRIS.dir/src/main.c.o" "gcc" "CMakeFiles/TETRIS.dir/src/main.c.o.d"
   "/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetris_logic.c" "CMakeFiles/TETRIS.dir/src/tetris_logic.c.o" "gcc" "CMakeFiles/TETRIS.dir/src/tetris_logic.c.o.d"
   "/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.c" "CMakeFiles/TETRIS.dir/src/tetromino.c.o" "gcc" "CMakeFiles/TETRIS.dir/src/tetromino.c.o.d"

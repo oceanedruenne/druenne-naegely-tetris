@@ -166,108 +166,108 @@ void update_game_state(GameState *state, int cleared_lines) {
     }
 }
 
-int main() {
-    srand(time(NULL));
+// int main() {
+//     srand(time(NULL));
 
-    // Initialize game and fixed grids
-    int grid[ROW][COLUMN] = {0};
-    int fixedGrid[ROW][COLUMN] = {0};
+//     // Initialize game and fixed grids
+//     int grid[NB_BLOCS_W][NB_BLOCS_H] = {0};
+//     int fixedGrid[NB_BLOCS_W][NB_BLOCS_H] = {0};
 
-    // Initialize a new tetromino
-    int tetromino[3][3];
-    int startX, startY;
-    generateNewTetromino(tetromino, &startX, &startY);
+//     // Initialize a new tetromino
+//     int tetromino[3][3];
+//     int startX, startY;
+//     generateNewTetromino(tetromino, &startX, &startY);
 
-    // Check whether the part can be placed at the beginning
-    if (!canPlace(tetromino, startX, startY, fixedGrid)) {
-        printf("Game Over !\n");
-        return 0;
-    }
+//     // Check whether the part can be placed at the beginning
+//     if (!canPlace(tetromino, startX, startY, fixedGrid)) {
+//         printf("Game Over !\n");
+//         return 0;
+//     }
 
-    struct timespec lastUpdate;
-    clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
+//     struct timespec lastUpdate;
+//     clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
 
-    // Main game loop
- while (1) {
+//     // Main game loop
+//  while (1) {
 
-        // Appel à l'IA pour déterminer le mouvement à effectuer
-        char ia_move = tetris_ai_play(grid, fixedGrid, tetromino, &startX, &startY);
+//         // Appel à l'IA pour déterminer le mouvement à effectuer
+//         char ia_move = tetris_ai_play(grid, fixedGrid, tetromino, &startX, &startY);
         
-        /*
-        char input = getNonBlockingKey();
+//         /*
+//         char input = getNonBlockingKey();
         
-        if ((input == 'd' || input == CHAR_RIGHT) && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
-            startY++;
-        } else if ((input == 'q' || input == CHAR_LEFT) && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
-            startY--;
-        } else if ((input == 's' || input == CHAR_DOWN) && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
-            startX++;
-        } else if (input == 'x') {
-            int temp[3][3];
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    temp[j][2 - i] = tetromino[i][j];
-                }
-            }
+//         if ((input == 'd' || input == CHAR_RIGHT) && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
+//             startY++;
+//         } else if ((input == 'q' || input == CHAR_LEFT) && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
+//             startY--;
+//         } else if ((input == 's' || input == CHAR_DOWN) && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
+//             startX++;
+//         } else if (input == 'x') {
+//             int temp[3][3];
+//             for (int i = 0; i < 3; i++) {
+//                 for (int j = 0; j < 3; j++) {
+//                     temp[j][2 - i] = tetromino[i][j];
+//                 }
+//             }
                 
-            if (canPlace(temp, startX, startY, fixedGrid)) {
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        tetromino[i][j] = temp[i][j];
-                    }
-                }
-            }
-        } else if (input == 'b') {
-            break;
-        }
-        */
+//             if (canPlace(temp, startX, startY, fixedGrid)) {
+//                 for (int i = 0; i < 3; i++) {
+//                     for (int j = 0; j < 3; j++) {
+//                         tetromino[i][j] = temp[i][j];
+//                     }
+//                 }
+//             }
+//         } else if (input == 'b') {
+//             break;
+//         }
+//         */
 
-        // Traitement des mouvements déterminés par l'IA
-        if (ia_move == 'd' && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
-            startY++;
-        } else if (ia_move == 'q' && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
-            startY--;
-        } else if (ia_move == 's' && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
-            startX++;
-        } else if (ia_move == 'x') {
-            int temp[3][3];
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    temp[j][2 - i] = tetromino[i][j];
-                }
-            }
-            if (canPlace(temp, startX, startY, fixedGrid)) {
-                memcpy(tetromino, temp, sizeof(temp));
-            }
-        }
+//         // Traitement des mouvements déterminés par l'IA
+//         if (ia_move == 'd' && canPlace(tetromino, startX, startY + 1, fixedGrid)) {
+//             startY++;
+//         } else if (ia_move == 'q' && canPlace(tetromino, startX, startY - 1, fixedGrid)) {
+//             startY--;
+//         } else if (ia_move == 's' && canPlace(tetromino, startX + 1, startY, fixedGrid)) {
+//             startX++;
+//         } else if (ia_move == 'x') {
+//             int temp[3][3];
+//             for (int i = 0; i < 3; i++) {
+//                 for (int j = 0; j < 3; j++) {
+//                     temp[j][2 - i] = tetromino[i][j];
+//                 }
+//             }
+//             if (canPlace(temp, startX, startY, fixedGrid)) {
+//                 memcpy(tetromino, temp, sizeof(temp));
+//             }
+//         }
 
-        // Manage the tetromino's descent speed
-        struct timespec now;
-        clock_gettime(CLOCK_MONOTONIC, &now);
-        double elapsed = (now.tv_sec - lastUpdate.tv_sec) + (now.tv_nsec - lastUpdate.tv_nsec) / 1e9;
+//         // Manage the tetromino's descent speed
+//         struct timespec now;
+//         clock_gettime(CLOCK_MONOTONIC, &now);
+//         double elapsed = (now.tv_sec - lastUpdate.tv_sec) + (now.tv_nsec - lastUpdate.tv_nsec) / 1e9;
 
-        if (elapsed >= 0.5) {
-            if (canPlace(tetromino, startX + 1, startY, fixedGrid)) {
-                startX++;
-            } else {
-                freezeTetromino(fixedGrid, tetromino, startX, startY);
-                clearLines(fixedGrid);
-                generateNewTetromino(tetromino, &startX, &startY);
+//         if (elapsed >= 0.5) {
+//             if (canPlace(tetromino, startX + 1, startY, fixedGrid)) {
+//                 startX++;
+//             } else {
+//                 freezeTetromino(fixedGrid, tetromino, startX, startY);
+//                 clearLines(fixedGrid);
+//                 generateNewTetromino(tetromino, &startX, &startY);
 
-                // Check if the game is finished
-                if (!canPlace(tetromino, startX, startY, fixedGrid)) {
-                    placeTetromino(grid, fixedGrid, tetromino, startX, startY);
-                    displayGrid(grid);
-                    printf("Game Over !\n");
-                    break;
-                }
-            }
+//                 // Check if the game is finished
+//                 if (!canPlace(tetromino, startX, startY, fixedGrid)) {
+//                     placeTetromino(grid, fixedGrid, tetromino, startX, startY);
+//                     displayGrid(grid);
+//                     printf("Game Over !\n");
+//                     break;
+//                 }
+//             }
 
-            lastUpdate = now;
-        }
+//             lastUpdate = now;
+//         }
 
-        placeTetromino(grid, fixedGrid, tetromino, startX, startY);
-        displayGrid(grid); // Display the updated grid
-        usleep(50 * 1000);
-    }
-}
+//         placeTetromino(grid, fixedGrid, tetromino, startX, startY);
+//         displayGrid(grid); // Display the updated grid
+//         usleep(50 * 1000);
+//     }
+// }

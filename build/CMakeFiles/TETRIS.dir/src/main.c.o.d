@@ -184,4 +184,6 @@ CMakeFiles/TETRIS.dir/src/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
- /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.h
+ /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.h \
+ /usr/include/curses.h /usr/include/ncurses_dll.h /usr/include/unctrl.h \
+ /usr/include/curses.h
