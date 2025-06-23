@@ -6,7 +6,11 @@
 #include <stdbool.h>
 #include <time.h>
 #include <SDL2/SDL_ttf.h>
+#include <unistd.h>
+#include <math.h>
 #include "tetris_logic.h"
+#include "tetromino.h"
+#include "AITetrisPlayer.h"
 
 #define BLOC_SIZE 20
 #define GAME_WINDOW_WIDTH (NB_BLOCS_W * (BLOC_SIZE) - 1)
@@ -19,14 +23,12 @@ SDL_Renderer *renderer;
 TTF_Font *title_font;
 TTF_Font *menu_font;
 
-// Function to initialize the SDL window and renderer
 void init(int width, int height)
 {
-	window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+    window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 }
 
-// Function to initialize the SDL grid
 void init_grid(SDL_Renderer *renderer, int x_offset) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  // White grid lines
     int grid_pixel_width = NB_BLOCS_W * BLOC_SIZE;
@@ -42,28 +44,26 @@ void init_grid(SDL_Renderer *renderer, int x_offset) {
     }
 }
 
-// Function to draw the tetrominos on the SDL grid
 void draw_tetrominos(SDL_Renderer *renderer, int grid[NB_BLOCS_H][NB_BLOCS_W], int x_offset)
 {
-	for (size_t i = 0; i < NB_BLOCS_H; i++)
-	{
-		for (size_t j = 0; j < NB_BLOCS_W; j++)
-		{
-			if (grid[i][j] != 0) {
-				const TetrominoColor draw_color = getTetrominoColor(grid[i][j]);
-				SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a);
-				SDL_Rect bloc_to_draw = { x_offset + j * BLOC_SIZE, i * BLOC_SIZE, BLOC_SIZE, BLOC_SIZE };
-				SDL_RenderFillRect(renderer, &bloc_to_draw);
-			}
-		}
-	}
+    for (size_t i = 0; i < NB_BLOCS_H; i++)
+    {
+        for (size_t j = 0; j < NB_BLOCS_W; j++)
+        {
+            if (grid[i][j] != 0) {
+                const TetrominoColor draw_color = getTetrominoColor(grid[i][j]);
+                SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a);
+                SDL_Rect bloc_to_draw = { x_offset + j * BLOC_SIZE, i * BLOC_SIZE, BLOC_SIZE, BLOC_SIZE };
+                SDL_RenderFillRect(renderer, &bloc_to_draw);
+            }
+        }
+    }
 }
 
-// Function to display the SDL grid with tetrominos
 void draw_grid(SDL_Renderer *renderer, int grid[NB_BLOCS_H][NB_BLOCS_W], int x_offset)
 {
-	init_grid(renderer, x_offset);
-	draw_tetrominos(renderer, grid, x_offset);
+    init_grid(renderer, x_offset);
+    draw_tetrominos(renderer, grid, x_offset);
 }
 
 void render_text(SDL_Renderer *renderer, int x, int y, const char *text, TTF_Font *font, SDL_Color color) {
@@ -106,136 +106,191 @@ void render_game_info(SDL_Renderer* renderer, TTF_Font* font, GameState* state, 
 }
 
 void render_menu(SDL_Renderer *renderer, TTF_Font *title_font, TTF_Font *menu_font, int selected_item, int window_width) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
-    SDL_RenderClear(renderer);
-
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color yellow = {255, 255, 0, 255};
 
-    // Render Title
+    // Render title
     int text_w, text_h;
-    const char* title_text = "Tetris";
-    TTF_SizeText(title_font, title_text, &text_w, &text_h);
-    render_text(renderer, (window_width - text_w) / 2, GAME_WINDOW_HEIGHT / 4, title_text, title_font, white);
+    TTF_SizeText(title_font, "Tetris", &text_w, &text_h);
+    render_text(renderer, (window_width - text_w) / 2, 50, "Tetris", title_font, white);
 
-    // Render Menu Items
-    const char* menu_items[] = {"Single Player", "Player vs AI (Not available)", "Exit"};
-    int y_pos = GAME_WINDOW_HEIGHT / 2;
-
+    // Render menu items
+    const char *menu_items[] = {"Single Player", "Player vs AI", "Exit"};
     for (int i = 0; i < 3; i++) {
+        SDL_Color color = (i == selected_item) ? yellow : white;
         TTF_SizeText(menu_font, menu_items[i], &text_w, &text_h);
-        render_text(renderer, (window_width - text_w) / 2, y_pos, menu_items[i], menu_font, i == selected_item ? yellow : white);
-        y_pos += 40;
+        render_text(renderer, (window_width - text_w) / 2, 200 + i * 50, menu_items[i], menu_font, color);
     }
-
-    SDL_RenderPresent(renderer);
 }
 
-int main(int argc, char** argv)
-{
-	// Initialize SDL
-        bool quit = false;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Initialize SDL: %s", SDL_GetError());
-        return EXIT_FAILURE;
+void run_player_vs_ai_game() {
+    bool quit = false;
+    int player_x_offset = 50;
+    int ai_x_offset = (NB_BLOCS_W * BLOC_SIZE) + 100;
+
+    // Player state
+    int player_grid[NB_BLOCS_H][NB_BLOCS_W] = {0};
+    int player_fixedGrid[NB_BLOCS_H][NB_BLOCS_W] = {0};
+    int player_startX = 0;
+    int player_startY = 3;
+    struct timespec player_lastUpdate;
+    clock_gettime(CLOCK_MONOTONIC, &player_lastUpdate);
+
+    // AI state
+    int ai_grid[NB_BLOCS_H][NB_BLOCS_W] = {0};
+    int ai_fixedGrid[NB_BLOCS_H][NB_BLOCS_W] = {0};
+    int ai_startX = 0;
+    int ai_startY = 3;
+    struct timespec ai_lastUpdate;
+    clock_gettime(CLOCK_MONOTONIC, &ai_lastUpdate);
+
+    TetrominoCollection tetrominos = initTetrominoCollection();
+    Tetromino player_currentTetromino = getRandomTetromino(&tetrominos);
+    Tetromino ai_currentTetromino = getRandomTetromino(&tetrominos);
+
+    if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid) ||
+        !canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+        return; // Initial game over check
     }
 
-    if(TTF_Init() == -1) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Initialize TTF: %s", TTF_GetError());
-        return EXIT_FAILURE;
-    }
+    srand(time(NULL));
 
-    title_font = TTF_OpenFont("../assets/font.ttf", 28);
-    if (title_font == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load title font: %s", TTF_GetError());
-        return EXIT_FAILURE;
-    }
-
-    menu_font = TTF_OpenFont("../assets/font.ttf", 18);
-    if (menu_font == NULL) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load menu font: %s", TTF_GetError());
-        TTF_CloseFont(title_font);
-        return EXIT_FAILURE;
-    }
-
-    int max_w = 0;
-    int text_w;
-
-    TTF_SizeText(title_font, "Tetris", &text_w, NULL);
-    if (text_w > max_w) {
-        max_w = text_w;
-    }
-
-    const char* menu_texts[] = {"Single Player", "Player vs AI (Not available)", "Exit"};
-    for (int i=0; i<3; ++i) {
-        TTF_SizeText(menu_font, menu_texts[i], &text_w, NULL);
-        if (text_w > max_w) {
-            max_w = text_w;
-        }
-    }
-
-    int menu_width = max_w + 100; // Add some padding
-    int final_width = (menu_width > GAME_WINDOW_WIDTH) ? menu_width : GAME_WINDOW_WIDTH;
-
-	init(final_width, GAME_WINDOW_HEIGHT);
-
-    bool in_menu = true;
-    int selected_item = 0;
-    const int menu_items_count = 3;
-
-    while (in_menu) {
+    while (!quit) {
+        // --- EVENT HANDLING (PLAYER) ---
         SDL_Event event;
-        while(SDL_PollEvent(&event)) {
+        while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-                in_menu = false;
                 quit = true;
             }
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_UP:
-                        selected_item = (selected_item - 1 + menu_items_count) % menu_items_count;
+                    case SDLK_q:
+                    case SDLK_LEFT:
+                        if (canPlace(player_currentTetromino, player_startX, player_startY - 1, player_fixedGrid)) player_startY--;
                         break;
+                    case SDLK_d:
+                    case SDLK_RIGHT:
+                        if (canPlace(player_currentTetromino, player_startX, player_startY + 1, player_fixedGrid)) player_startY++;
+                        break;
+                    case SDLK_s:
                     case SDLK_DOWN:
-                        selected_item = (selected_item + 1) % menu_items_count;
+                        if (canPlace(player_currentTetromino, player_startX + 1, player_startY, player_fixedGrid)) player_startX++;
                         break;
-                    case SDLK_RETURN:
-                        switch (selected_item) {
-                            case 0: // Single Player
-                                in_menu = false;
-                                break;
-                            case 1: // Player vs AI
-                                // Do nothing for now
-                                break;
-                            case 2: // Exit
-                                in_menu = false;
-                                quit = true;
-                                break;
+                    case SDLK_x:
+                    case SDLK_UP:
+                        try_rotate_tetromino(&player_currentTetromino, &player_startX, &player_startY, player_fixedGrid);
+                        break;
+                    case SDLK_SPACE:
+                        while (canPlace(player_currentTetromino, player_startX + 1, player_startY, player_fixedGrid)) {
+                            player_startX++;
                         }
+                        freezeTetromino(player_fixedGrid, player_currentTetromino, player_startX, player_startY);
+                        int cleared_lines = clearLines(player_fixedGrid);
+                        if (cleared_lines > 1) {
+                            int garbage_to_send = (cleared_lines == 4) ? 4 : cleared_lines - 1;
+                            add_garbage_lines(ai_fixedGrid, garbage_to_send);
+                            if (!canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+                                quit = true;
+                            }
+                        }
+                        player_currentTetromino = getRandomTetromino(&tetrominos);
+                        player_startX = 0;
+                        player_startY = 3;
+                        if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid)) {
+                            quit = true;
+                        }
+                        clock_gettime(CLOCK_MONOTONIC, &player_lastUpdate);
                         break;
                     case SDLK_ESCAPE:
-                        in_menu = false;
                         quit = true;
                         break;
                 }
             }
         }
-        render_menu(renderer, title_font, menu_font, selected_item, final_width);
-        SDL_Delay(10);
+
+        // --- PLAYER GAME LOGIC ---
+        struct timespec player_nowTimer;
+        clock_gettime(CLOCK_MONOTONIC, &player_nowTimer);
+        double player_elapsed = (player_nowTimer.tv_sec - player_lastUpdate.tv_sec) + (player_nowTimer.tv_nsec - player_lastUpdate.tv_nsec) / 1e9;
+
+        if (player_elapsed >= 0.5) { // Automatic fall
+            if (canPlace(player_currentTetromino, player_startX + 1, player_startY, player_fixedGrid)) {
+                player_startX++;
+            } else {
+                freezeTetromino(player_fixedGrid, player_currentTetromino, player_startX, player_startY);
+                int cleared_lines = clearLines(player_fixedGrid);
+                if (cleared_lines > 1) { // Send garbage for 2+ lines
+                    int garbage_to_send = (cleared_lines == 4) ? 4 : cleared_lines - 1;
+                    add_garbage_lines(ai_fixedGrid, garbage_to_send);
+                    if (!canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+                        quit = true; // AI loses due to garbage
+                    }
+                }
+                player_currentTetromino = getRandomTetromino(&tetrominos);
+                player_startX = 0;
+                player_startY = 3;
+                if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid)) {
+                    quit = true; // Player loses
+                }
+            }
+            player_lastUpdate = player_nowTimer;
+        }
+
+        // --- AI GAME LOGIC ---
+        struct timespec ai_nowTimer;
+        clock_gettime(CLOCK_MONOTONIC, &ai_nowTimer);
+        double ai_elapsed = (ai_nowTimer.tv_sec - ai_lastUpdate.tv_sec) + (ai_nowTimer.tv_nsec - ai_lastUpdate.tv_nsec) / 1e9;
+        
+        if (ai_elapsed >= 0.1) { // AI plays faster
+            char move = tetris_ai_play(ai_grid, ai_fixedGrid, ai_currentTetromino, &ai_startX, &ai_startY);
+            if (move == 'd') { // Right
+                if (canPlace(ai_currentTetromino, ai_startX, ai_startY + 1, ai_fixedGrid)) ai_startY++;
+            } else if (move == 'q') { // Left
+                if (canPlace(ai_currentTetromino, ai_startX, ai_startY - 1, ai_fixedGrid)) ai_startY--;
+            } else if (move == 'x') { // Rotate
+                Tetromino temp = ai_currentTetromino;
+                rotate_tetromino(&temp);
+                if (canPlace(temp, ai_startX, ai_startY, ai_fixedGrid)) ai_currentTetromino = temp;
+            } else if (move == 's') { // Down
+                if (canPlace(ai_currentTetromino, ai_startX + 1, ai_startY, ai_fixedGrid)) {
+                    ai_startX++;
+                } else {
+                    freezeTetromino(ai_fixedGrid, ai_currentTetromino, ai_startX, ai_startY);
+                    int cleared_lines = clearLines(ai_fixedGrid);
+                    if (cleared_lines > 1) { // Send garbage for 2+ lines
+                        int garbage_to_send = (cleared_lines == 4) ? 4 : cleared_lines - 1;
+                        add_garbage_lines(player_fixedGrid, garbage_to_send);
+                        if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid)) {
+                            quit = true; // Player loses due to garbage
+                        }
+                    }
+                    ai_currentTetromino = getRandomTetromino(&tetrominos);
+                    ai_startX = 0;
+                    ai_startY = 3;
+                    if (!canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+                        quit = true; // AI loses
+                    }
+                }
+            }
+            ai_lastUpdate = ai_nowTimer;
+        }
+
+        // --- RENDERING ---
+        placeTetromino(player_grid, player_fixedGrid, player_currentTetromino, player_startX, player_startY);
+        placeTetromino(ai_grid, ai_fixedGrid, ai_currentTetromino, ai_startX, ai_startY);
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        
+        draw_grid(renderer, player_grid, player_x_offset);
+        draw_grid(renderer, ai_grid, ai_x_offset);
+        
+        SDL_RenderPresent(renderer);
     }
+}
 
-    if (quit) {
-        TTF_CloseFont(title_font);
-        TTF_CloseFont(menu_font);
-        TTF_Quit();
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 0;
-    }
-
-    int game_grid_width = NB_BLOCS_W * BLOC_SIZE;
-    int x_offset = (final_width - game_grid_width) / 2;
-
+void run_single_player_game(int x_offset) {
+    bool quit = false;
     int grid[NB_BLOCS_H][NB_BLOCS_W] = {0};
     int fixedGrid[NB_BLOCS_H][NB_BLOCS_W] = {0};
     GameState game_state;
@@ -244,132 +299,171 @@ int main(int argc, char** argv)
     int startX = 0;
     int startY = 3;
 
-    Uint64 prev, now; // timers
-    now = SDL_GetPerformanceCounter();
-    double delta_t;  // frame duration in milliseconds
+    struct timespec lastUpdate;
+    clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-	init_grid(renderer, x_offset);
-	SDL_RenderPresent(renderer);
-
-    // Initialize tetromino collection
     TetrominoCollection tetrominos = initTetrominoCollection();
-    tetrominos_color = initTetrominoColorCollection();
-
-    // Initialize current tetromino
     Tetromino currentTetromino = getRandomTetromino(&tetrominos);
 
-    // Check whether the part can be placed at the beginning
     if (!canPlace(currentTetromino, startX, startY, fixedGrid)) {
-        // printf("Game Over !\n");
-        return 0;
+        return;
     }
 
-	struct timespec lastUpdate;
-	clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
+    double fall_speed = 0.5; // Initial fall speed in seconds
 
-	srand(time(NULL));
-	
-	while (!quit)
-	{
-		SDL_Event event;
-		while (!quit && SDL_PollEvent(&event)) {
-			switch (event.type) {
-				case SDL_QUIT:
-					quit = true;
-					break;
-				case SDL_KEYDOWN:
-					switch (event.key.keysym.sym)
-					{
-						// Keyboard events detection
-						case SDLK_d:  
-							if (canPlace(currentTetromino, startX, startY + 1, fixedGrid)) startY++;
-							break;
-						case SDLK_q:  
-							if (canPlace(currentTetromino, startX, startY - 1, fixedGrid)) startY--;
-							break;
-						case SDLK_s:  
-							if (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) startX++;
-							break;
-						case SDLK_x:  
-							Tetromino temp;
-							for (int i = 0; i < 4; i++) {
-								for (int j = 0; j < 4; j++) {
-									temp.shape[j][3 - i] = currentTetromino.shape[i][j];
-								}
-							}
-								
-							if (canPlace(temp, startX, startY, fixedGrid)) {
-								for (int i = 0; i < 4; i++) {
-									for (int j = 0; j < 4; j++) {
-										currentTetromino.shape[i][j] = temp.shape[i][j];
-									}
-								}
-							}
-							break;
-						case SDLK_ESCAPE: quit = true; break;
-						default: break;
-					}
-					break;
-                    // case SDL_MOUSEMOTION:	
-                    //     x_vault += event.motion.xrel;
-                    //     break;
-                    // case SDL_MOUSEBUTTONDOWN:
-                    // 	printf("mouse click %d\n", event.button.button);
-                    // 	break;
-				default: 
-					break;
-			}
-		}
+    while (!quit) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                quit = true;
+            }
+            if (event.type == SDL_KEYDOWN) {
+                Tetromino temp = currentTetromino;
+                switch (event.key.keysym.sym) {
+                    case SDLK_q:
+                    case SDLK_LEFT:
+                        if (canPlace(currentTetromino, startX, startY - 1, fixedGrid)) startY--;
+                        break;
+                    case SDLK_d:
+                    case SDLK_RIGHT:
+                        if (canPlace(currentTetromino, startX, startY + 1, fixedGrid)) startY++;
+                        break;
+                    case SDLK_s:
+                    case SDLK_DOWN:
+                        if (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) startX++;
+                        break;
+                    case SDLK_x:
+                    case SDLK_UP:
+                        try_rotate_tetromino(&currentTetromino, &startX, &startY, fixedGrid);
+                        break;
+                    case SDLK_SPACE:
+                        while (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) {
+                            startX++;
+                        }
+                        freezeTetromino(fixedGrid, currentTetromino, startX, startY);
+                        int cleared_lines = clearLines(fixedGrid);
+                        update_game_state(&game_state, cleared_lines);
+                        currentTetromino = getRandomTetromino(&tetrominos);
+                        startX = 0;
+                        startY = 3;
+                        if (!canPlace(currentTetromino, startX, startY, fixedGrid)) {
+                            quit = true;
+                        }
+                        clock_gettime(CLOCK_MONOTONIC, &lastUpdate); // Reset fall timer
+                        break;
+                    case SDLK_ESCAPE:
+                        quit = true;
+                        break;
+                }
+            }
+        }
 
-		// Manage the tetromino's descent speed
         struct timespec nowTimer;
         clock_gettime(CLOCK_MONOTONIC, &nowTimer);
         double elapsed = (nowTimer.tv_sec - lastUpdate.tv_sec) + (nowTimer.tv_nsec - lastUpdate.tv_nsec) / 1e9;
 
-        if (elapsed >= 0.5) {
+        if (elapsed >= fall_speed) {
             if (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) {
                 startX++;
             } else {
                 freezeTetromino(fixedGrid, currentTetromino, startX, startY);
                 int cleared_lines = clearLines(fixedGrid);
+                int old_level = game_state.level;
                 update_game_state(&game_state, cleared_lines);
+                if (game_state.level > old_level) {
+                    fall_speed = 0.5 * pow(0.85, game_state.level - 1);
+                }
                 currentTetromino = getRandomTetromino(&tetrominos);
                 startX = 0;
                 startY = 3;
 
-                // Check if the game is finished
                 if (!canPlace(currentTetromino, startX, startY, fixedGrid)) {
                     quit = true;
-                    break;
                 }
             }
-
             lastUpdate = nowTimer;
         }
 
         placeTetromino(grid, fixedGrid, currentTetromino, startX, startY);
-        
-		prev = now;
-		now = SDL_GetPerformanceCounter();
-		delta_t = (double)((now - prev) * 1000 / (double)SDL_GetPerformanceFrequency());
 
-		// Updating the window
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    	SDL_RenderClear(renderer);
-		draw_grid(renderer, grid, x_offset);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        draw_grid(renderer, grid, x_offset);
         render_game_info(renderer, menu_font, &game_state, x_offset);
-		SDL_RenderPresent(renderer);
-		
-		usleep(50 * SLEEP_TIME);
-	}
+        SDL_RenderPresent(renderer);
+    }
+}
 
+int main(int argc, char** argv)
+{
+    if (SDL_Init(SDL_INIT_VIDEO) < 0 || TTF_Init() == -1) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Initialization failed: %s %s", SDL_GetError(), TTF_GetError());
+        return EXIT_FAILURE;
+    }
+
+    int menu_width = 500;
+    int menu_height = 400;
+    init(menu_width, menu_height);
+
+    title_font = TTF_OpenFont("../assets/font.ttf", 48);
+    menu_font = TTF_OpenFont("../assets/font.ttf", 24);
+    if (!title_font || !menu_font) {
+        printf("Failed to load font: %s\n", TTF_GetError());
+        TTF_Quit();
+        SDL_Quit();
+        return 1;
+    }
+
+    tetrominos_color = initTetrominoColorCollection();
+
+    int selected_item = 0;
+    bool quit_menu = false;
+    while (!quit_menu) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                selected_item = 2; // Exit
+                quit_menu = true;
+            } else if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
+                    case SDLK_UP: selected_item = (selected_item - 1 + 3) % 3; break;
+                    case SDLK_DOWN: selected_item = (selected_item + 1) % 3; break;
+                    case SDLK_RETURN: quit_menu = true; break;
+                }
+            }
+        }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        render_menu(renderer, title_font, menu_font, selected_item, menu_width);
+        SDL_RenderPresent(renderer);
+    }
+
+    // Close menu window and open game window
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    if (selected_item != 2) {
+        if (selected_item == 0) {
+            int game_width = (NB_BLOCS_W * BLOC_SIZE) + 500; // Widen for stats
+            int game_height = (NB_BLOCS_H * BLOC_SIZE);
+            int x_offset = (game_width - (NB_BLOCS_W * BLOC_SIZE)) / 2;
+            init(game_width, game_height);
+            run_single_player_game(x_offset);
+        } else if (selected_item == 1) {
+            int pvp_width = (NB_BLOCS_W * BLOC_SIZE) * 2 + 150;
+            int pvp_height = (NB_BLOCS_H * BLOC_SIZE);
+            init(pvp_width, pvp_height);
+            run_player_vs_ai_game();
+        }
+    }
+
+    // Clean up SDL resources
     TTF_CloseFont(title_font);
     TTF_CloseFont(menu_font);
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
     return 0;
 }

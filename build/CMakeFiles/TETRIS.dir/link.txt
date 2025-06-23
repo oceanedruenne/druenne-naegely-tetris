@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/TETRIS.dir/src/main.c.o CMakeFiles/TETRIS.dir/src/tetromino.c.o CMakeFiles/TETRIS.dir/src/tetris_logic.c.o CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o -o ../bin/TETRIS  -L/usr/lib/x86_64-linux-gnu  -lSDL2 -lSDL2_ttf -lSDL2 
+/usr/bin/cc CMakeFiles/TETRIS.dir/src/main.c.o CMakeFiles/TETRIS.dir/src/tetromino.c.o CMakeFiles/TETRIS.dir/src/tetris_logic.c.o CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o -o ../bin/TETRIS  -L/usr/lib/x86_64-linux-gnu  -lSDL2 -lSDL2_ttf -lSDL2 -lm 

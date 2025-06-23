@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <string.h>
+#include <stdbool.h>
 #include "tetromino.h"
 #include <ncurses.h>
 
@@ -34,5 +35,8 @@ void freezeTetromino(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W], Tetromino tetromino,
 int clearLines(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]);
 void init_game_state(GameState *state);
 void update_game_state(GameState *state, int cleared_lines);
+void add_garbage_lines(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W], int line_count);
+bool try_rotate_tetromino(Tetromino *tetromino, int *x, int *y, int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]);
+
 
 #endif

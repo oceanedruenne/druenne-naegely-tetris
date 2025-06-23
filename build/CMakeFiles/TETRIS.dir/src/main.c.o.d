@@ -163,6 +163,11 @@ CMakeFiles/TETRIS.dir/src/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
  /usr/include/SDL2/SDL_ttf.h /usr/include/SDL2/SDL.h \
+ /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+ /usr/include/x86_64-linux-gnu/bits/confname.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetris_logic.h \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
@@ -178,12 +183,8 @@ CMakeFiles/TETRIS.dir/src/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
- /usr/include/x86_64-linux-gnu/bits/termios-misc.h /usr/include/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
- /usr/include/x86_64-linux-gnu/bits/confname.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+ /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
  /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/tetromino.h \
  /usr/include/curses.h /usr/include/ncurses_dll.h /usr/include/unctrl.h \
- /usr/include/curses.h
+ /usr/include/curses.h \
+ /home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/src/AITetrisPlayer.h

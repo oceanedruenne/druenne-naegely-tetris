@@ -74,9 +74,10 @@ CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h /usr/include/string.h \
- /usr/include/strings.h /usr/include/curses.h /usr/include/ncurses_dll.h \
+ /usr/include/strings.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h /usr/include/curses.h \
+ /usr/include/ncurses_dll.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h /usr/include/unctrl.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h /usr/include/unctrl.h \
  /usr/include/curses.h

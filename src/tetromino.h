@@ -50,4 +50,6 @@ void printTetromino(Tetromino tetromino);
 
 TetrominoColor getTetrominoColor(int color_number);
 
+void rotate_tetromino(Tetromino *tetromino);
+
 #endif

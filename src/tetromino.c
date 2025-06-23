@@ -163,3 +163,18 @@ void printTetromino(Tetromino tetromino) {
         printf("\n");
     }
 }
+
+void rotate_tetromino(Tetromino *tetromino) {
+    int temp[4][4];
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            temp[i][j] = tetromino->shape[i][j];
+        }
+    }
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            tetromino->shape[i][j] = temp[3 - j][i];
+        }
+    }
+}

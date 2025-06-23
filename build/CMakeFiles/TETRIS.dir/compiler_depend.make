@@ -64,36 +64,9 @@ CMakeFiles/TETRIS.dir/src/AITetrisPlayer.c.o: ../src/AITetrisPlayer.c \
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   ../src/tetris_logic.h \
-  /usr/include/termios.h \
-  /usr/include/x86_64-linux-gnu/bits/termios.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-struct.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_cc.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-baud.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
-  /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
-  /usr/include/unistd.h \
-  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
-  /usr/include/x86_64-linux-gnu/bits/environments.h \
-  /usr/include/x86_64-linux-gnu/bits/confname.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
-  /usr/include/string.h \
-  /usr/include/strings.h \
-  /usr/include/curses.h \
-  /usr/include/ncurses_dll.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h \
-  /usr/include/stdint.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
-  /usr/include/unctrl.h \
-  /usr/include/curses.h
+  /usr/include/string.h \
+  /usr/include/strings.h
 
 CMakeFiles/TETRIS.dir/src/main.c.o: ../src/main.c \
   /usr/include/stdc-predef.h \
@@ -296,39 +269,23 @@ CMakeFiles/TETRIS.dir/src/main.c.o: ../src/main.c \
   /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
   /usr/include/SDL2/SDL_ttf.h \
   /usr/include/SDL2/SDL.h \
-  ../src/tetris_logic.h \
-  /usr/include/x86_64-linux-gnu/sys/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
-  /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
-  /usr/include/termios.h \
-  /usr/include/x86_64-linux-gnu/bits/termios.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-struct.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_cc.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-baud.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
   /usr/include/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
   /usr/include/x86_64-linux-gnu/bits/confname.h \
   /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
   /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+  ../src/tetris_logic.h \
   ../src/tetromino.h \
-  /usr/include/curses.h \
-  /usr/include/ncurses_dll.h \
-  /usr/include/unctrl.h \
-  /usr/include/curses.h
+  ../src/AITetrisPlayer.h
 
 CMakeFiles/TETRIS.dir/src/tetris_logic.c.o: ../src/tetris_logic.c \
   /usr/include/stdc-predef.h \
   ../src/tetris_logic.h \
-  /usr/include/time.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
+  ../src/tetromino.h \
+  /usr/include/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h \
   /usr/include/features-time64.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -338,26 +295,45 @@ CMakeFiles/TETRIS.dir/src/tetris_logic.c.o: ../src/tetris_logic.c \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
-  /usr/include/x86_64-linux-gnu/bits/time.h \
+  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
+  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/sys/types.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
   /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+  /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/endian.h \
   /usr/include/x86_64-linux-gnu/bits/endian.h \
   /usr/include/x86_64-linux-gnu/bits/endianness.h \
-  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
-  /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+  /usr/include/x86_64-linux-gnu/bits/byteswap.h \
+  /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+  /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
+  /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/time.h \
+  /usr/include/x86_64-linux-gnu/bits/time.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
@@ -365,40 +341,7 @@ CMakeFiles/TETRIS.dir/src/tetris_logic.c.o: ../src/tetris_logic.c \
   /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/floatn.h \
-  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
-  /usr/include/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/termios.h \
-  /usr/include/x86_64-linux-gnu/bits/termios.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-struct.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_cc.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-baud.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
-  /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
-  /usr/include/unistd.h \
-  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
-  /usr/include/x86_64-linux-gnu/bits/confname.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
-  /usr/include/string.h \
-  ../src/tetromino.h \
-  /usr/include/curses.h \
-  /usr/include/ncurses_dll.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h \
-  /usr/include/stdint.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
-  /usr/include/unctrl.h \
-  /usr/include/curses.h
+  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h
 
 CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
   /usr/include/stdc-predef.h \
@@ -467,6 +410,8 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 ../src/tetris_logic.c:
 
+/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+
 /usr/include/SDL2/SDL_ttf.h:
 
 /usr/include/SDL2/SDL_misc.h:
@@ -483,6 +428,10 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/SDL2/SDL_loadso.h:
 
+/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
+
+/usr/include/SDL2/SDL_filesystem.h:
+
 /usr/include/SDL2/SDL_gesture.h:
 
 /usr/include/SDL2/SDL_gamecontroller.h:
@@ -492,6 +441,10 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 /usr/include/SDL2/SDL_mouse.h:
 
 /usr/include/SDL2/SDL_scancode.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/SDL2/SDL_keycode.h:
 
 /usr/include/SDL2/SDL_keyboard.h:
 
@@ -517,6 +470,10 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2vlintrin.h:
 
+/usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2intrin.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vpopcntdqintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx5124vnniwintrin.h:
@@ -532,6 +489,8 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlbwintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512dqintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bwintrin.h:
 
 /usr/include/SDL2/SDL_pixels.h:
 
@@ -563,6 +522,10 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/hresetintrin.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xtestintrin.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/xsavecintrin.h:
 
 /usr/include/SDL2/SDL_system.h:
@@ -577,53 +540,21 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/sgxintrin.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/serializeintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/rtmintrin.h:
-
-/usr/include/SDL2/SDL_hints.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/rdseedintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/pkuintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/popcntintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmiintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitxintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/clzerointrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/clwbintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/tsxldtrkintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/cldemoteintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/cetintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/bmi2intrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bf16vlintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/adxintrin.h:
-
 /usr/include/stdio.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2intrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
+/usr/lib/gcc/x86_64-linux-gnu/11/include/cetintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
-/usr/include/termios.h:
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmiintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitxintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/pkuintrin.h:
 
 /usr/include/SDL2/SDL_hidapi.h:
 
@@ -637,12 +568,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/lzcntintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios.h:
-
 /usr/include/x86_64-linux-gnu/SDL2/_real_SDL_config.h:
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
@@ -653,6 +578,10 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/tsxldtrkintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/cldemoteintrin.h:
+
 /usr/include/SDL2/SDL_touch.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
@@ -660,10 +589,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/pconfigintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
@@ -674,8 +599,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 /usr/include/x86_64-linux-gnu/bits/long-double.h:
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
-
-/usr/include/x86_64-linux-gnu/bits/environments.h:
 
 /usr/include/string.h:
 
@@ -699,7 +622,9 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
-/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitintrin.h:
+
+/usr/include/features-time64.h:
 
 /usr/include/time.h:
 
@@ -731,16 +656,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/movdirintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-misc.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/fxsrintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/enqcmdintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitflags.h:
-
 ../src/AITetrisPlayer.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
@@ -753,7 +668,15 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/SDL2/SDL_cpuinfo.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/pconfigintrin.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
+
+/usr/include/x86_64-linux-gnu/bits/types.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
 
 /usr/include/SDL2/SDL_locale.h:
 
@@ -762,10 +685,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 ../src/tetromino.h:
 
 ../src/AITetrisPlayer.c:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/bmiintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
 /usr/include/SDL2/SDL_rect.h:
 
@@ -784,8 +703,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 /usr/include/stdc-predef.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
-
-/usr/include/unctrl.h:
 
 /usr/include/SDL2/SDL_stdinc.h:
 
@@ -811,8 +728,6 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
-/usr/include/x86_64-linux-gnu/bits/termios-tcflow.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
 /usr/include/SDL2/SDL_platform.h:
@@ -825,17 +740,11 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/SDL2/begin_code.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/bmi2intrin.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vnniintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/clflushoptintrin.h:
-
-/usr/include/x86_64-linux-gnu/sys/types.h:
-
-/usr/include/SDL2/SDL_main.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/amxbf16intrin.h:
 
@@ -849,69 +758,17 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 ../src/main.c:
 
-/usr/include/features-time64.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-struct.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/xtestintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h:
-
-/usr/include/SDL2/SDL_filesystem.h:
-
-/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-c_cc.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bwintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h:
-
-/usr/include/x86_64-linux-gnu/bits/types.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-baud.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/include/x86_64-linux-gnu/sys/ttydefaults.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
-
-/usr/include/SDL2/SDL_thread.h:
-
-/usr/include/SDL2/SDL_keycode.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
 
 /usr/include/strings.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/lwpintrin.h:
-
-/usr/include/curses.h:
-
-/usr/include/stdint.h:
-
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
-
-/usr/include/x86_64-linux-gnu/sys/select.h:
-
-/usr/include/unistd.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
-
 /usr/include/SDL2/SDL_config.h:
 
 /usr/include/SDL2/close_code.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
 
 /usr/include/SDL2/SDL_blendmode.h:
 
@@ -923,6 +780,18 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/movdirintrin.h:
+
+/usr/include/stdint.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/unistd.h:
+
+/usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/gfniintrin.h:
 
 /usr/include/math.h:
@@ -931,11 +800,13 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bf16vlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/adxintrin.h:
+
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h:
-
-/usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
@@ -943,10 +814,50 @@ CMakeFiles/TETRIS.dir/src/tetromino.c.o: ../src/tetromino.c \
 
 /usr/include/SDL2/SDL_atomic.h:
 
+/usr/include/SDL2/SDL_hints.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/rdseedintrin.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/prfchwintrin.h:
 
 /usr/include/SDL2/SDL_audio.h:
 
-/usr/include/ncurses_dll.h:
-
 /usr/include/SDL2/SDL_error.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/SDL2/SDL_thread.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/bmiintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vnniintrin.h:
+
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/usr/include/SDL2/SDL_main.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/clflushoptintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/clwbintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/clzerointrin.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitflags.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/enqcmdintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/fxsrintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/lzcntintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/lwpintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/popcntintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/serializeintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/rtmintrin.h:
