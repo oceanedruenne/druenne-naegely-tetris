@@ -1,7 +1,4 @@
-#include "Tetromino.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include "tetromino.h"
 
 TetrominoCollection initTetrominoCollection() {
     TetrominoCollection collection;
@@ -114,8 +111,6 @@ TetrominoColorCollection initTetrominoColorCollection() {
 Tetromino getRandomTetromino(TetrominoCollection* collection) {
     srand(time(NULL));
     int randomIndex = rand() % 7;
-
-    printf("Random index: %d\n", randomIndex);
 
     switch (randomIndex) {
         case 0:

@@ -129,30 +129,6 @@ TETRIS/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/build
 .PHONY : TETRIS/fast
 
-src/Tetromino.o: src/Tetromino.c.o
-.PHONY : src/Tetromino.o
-
-# target to build an object file
-src/Tetromino.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/Tetromino.c.o
-.PHONY : src/Tetromino.c.o
-
-src/Tetromino.i: src/Tetromino.c.i
-.PHONY : src/Tetromino.i
-
-# target to preprocess a source file
-src/Tetromino.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/Tetromino.c.i
-.PHONY : src/Tetromino.c.i
-
-src/Tetromino.s: src/Tetromino.c.s
-.PHONY : src/Tetromino.s
-
-# target to generate assembly for a file
-src/Tetromino.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/Tetromino.c.s
-.PHONY : src/Tetromino.c.s
-
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -177,6 +153,54 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/tetris_logic.o: src/tetris_logic.c.o
+.PHONY : src/tetris_logic.o
+
+# target to build an object file
+src/tetris_logic.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/tetris_logic.c.o
+.PHONY : src/tetris_logic.c.o
+
+src/tetris_logic.i: src/tetris_logic.c.i
+.PHONY : src/tetris_logic.i
+
+# target to preprocess a source file
+src/tetris_logic.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/tetris_logic.c.i
+.PHONY : src/tetris_logic.c.i
+
+src/tetris_logic.s: src/tetris_logic.c.s
+.PHONY : src/tetris_logic.s
+
+# target to generate assembly for a file
+src/tetris_logic.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/tetris_logic.c.s
+.PHONY : src/tetris_logic.c.s
+
+src/tetromino.o: src/tetromino.c.o
+.PHONY : src/tetromino.o
+
+# target to build an object file
+src/tetromino.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/tetromino.c.o
+.PHONY : src/tetromino.c.o
+
+src/tetromino.i: src/tetromino.c.i
+.PHONY : src/tetromino.i
+
+# target to preprocess a source file
+src/tetromino.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/tetromino.c.i
+.PHONY : src/tetromino.c.i
+
+src/tetromino.s: src/tetromino.c.s
+.PHONY : src/tetromino.s
+
+# target to generate assembly for a file
+src/tetromino.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TETRIS.dir/build.make CMakeFiles/TETRIS.dir/src/tetromino.c.s
+.PHONY : src/tetromino.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +210,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... TETRIS"
-	@echo "... src/Tetromino.o"
-	@echo "... src/Tetromino.i"
-	@echo "... src/Tetromino.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/tetris_logic.o"
+	@echo "... src/tetris_logic.i"
+	@echo "... src/tetris_logic.s"
+	@echo "... src/tetromino.o"
+	@echo "... src/tetromino.i"
+	@echo "... src/tetromino.s"
 .PHONY : help
 
 
