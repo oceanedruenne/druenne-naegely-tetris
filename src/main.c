@@ -239,7 +239,7 @@ void run_player_vs_ai_game() {
         clock_gettime(CLOCK_MONOTONIC, &ai_nowTimer);
         double ai_elapsed = (ai_nowTimer.tv_sec - ai_lastUpdate.tv_sec) + (ai_nowTimer.tv_nsec - ai_lastUpdate.tv_nsec) / 1e9;
         
-        if (ai_elapsed >= 0.1) { // AI plays faster
+        if (ai_elapsed >= 0.01) { // AI plays faster
             char move = tetris_ai_play(ai_grid, ai_fixedGrid, ai_currentTetromino, &ai_startX, &ai_startY);
             if (move == 'd') { // Right
                 if (canPlace(ai_currentTetromino, ai_startX, ai_startY + 1, ai_fixedGrid)) ai_startY++;
@@ -292,10 +292,11 @@ void run_single_player_game(int x_offset) {
     int grid[NB_BLOCS_H][NB_BLOCS_W] = {0};
     int fixedGrid[NB_BLOCS_H][NB_BLOCS_W] = {0};
     GameState game_state;
-    init_game_state(&game_state);
+    init_game_state(&game_state); // INITIALISE STATS
 
-    int startX = 0;
-    int startY = 3;
+    // Current tetromino position
+    int X = 0;
+    int Y = 3;
 
     struct timespec lastUpdate;
     clock_gettime(CLOCK_MONOTONIC, &lastUpdate);
@@ -303,7 +304,7 @@ void run_single_player_game(int x_offset) {
     TetrominoCollection tetrominos = initTetrominoCollection();
     Tetromino currentTetromino = getRandomTetromino(&tetrominos);
 
-    if (!canPlace(currentTetromino, startX, startY, fixedGrid)) {
+    if (!canPlace(currentTetromino, X, Y, fixedGrid)) {
         return;
     }
 
@@ -320,31 +321,31 @@ void run_single_player_game(int x_offset) {
                 switch (event.key.keysym.sym) {
                     case SDLK_q:
                     case SDLK_LEFT:
-                        if (canPlace(currentTetromino, startX, startY - 1, fixedGrid)) startY--;
+                        if (canPlace(currentTetromino, X, Y - 1, fixedGrid)) Y--;
                         break;
                     case SDLK_d:
                     case SDLK_RIGHT:
-                        if (canPlace(currentTetromino, startX, startY + 1, fixedGrid)) startY++;
+                        if (canPlace(currentTetromino, X, Y + 1, fixedGrid)) Y++;
                         break;
                     case SDLK_s:
                     case SDLK_DOWN:
-                        if (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) startX++;
+                        if (canPlace(currentTetromino, X + 1, Y, fixedGrid)) Y++;
                         break;
                     case SDLK_x:
                     case SDLK_UP:
-                        try_rotate_tetromino(&currentTetromino, &startX, &startY, fixedGrid);
+                        try_rotate_tetromino(&currentTetromino, &X, &Y, fixedGrid);
                         break;
                     case SDLK_SPACE:
-                        while (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) {
-                            startX++;
+                        while (canPlace(currentTetromino, X + 1, Y, fixedGrid)) {
+                            X++;
                         }
-                        freezeTetromino(fixedGrid, currentTetromino, startX, startY);
+                        freezeTetromino(fixedGrid, currentTetromino, X, Y);
                         int cleared_lines = clearLines(fixedGrid);
                         update_game_state(&game_state, cleared_lines);
                         currentTetromino = getRandomTetromino(&tetrominos);
-                        startX = 0;
-                        startY = 3;
-                        if (!canPlace(currentTetromino, startX, startY, fixedGrid)) {
+                        X = 0;
+                        Y = 3;
+                        if (!canPlace(currentTetromino, X, Y, fixedGrid)) {
                             quit = true;
                         }
                         clock_gettime(CLOCK_MONOTONIC, &lastUpdate); // Reset fall timer
@@ -361,10 +362,10 @@ void run_single_player_game(int x_offset) {
         double elapsed = (nowTimer.tv_sec - lastUpdate.tv_sec) + (nowTimer.tv_nsec - lastUpdate.tv_nsec) / 1e9;
 
         if (elapsed >= fall_speed) {
-            if (canPlace(currentTetromino, startX + 1, startY, fixedGrid)) {
-                startX++;
+            if (canPlace(currentTetromino, X + 1, Y, fixedGrid)) {
+                X++;
             } else {
-                freezeTetromino(fixedGrid, currentTetromino, startX, startY);
+                freezeTetromino(fixedGrid, currentTetromino, X, Y);
                 int cleared_lines = clearLines(fixedGrid);
                 int old_level = game_state.level;
                 update_game_state(&game_state, cleared_lines);
@@ -372,17 +373,17 @@ void run_single_player_game(int x_offset) {
                     fall_speed = 0.5 * pow(0.85, game_state.level - 1);
                 }
                 currentTetromino = getRandomTetromino(&tetrominos);
-                startX = 0;
-                startY = 3;
+                X = 0;
+                Y = 3;
 
-                if (!canPlace(currentTetromino, startX, startY, fixedGrid)) {
+                if (!canPlace(currentTetromino, X, Y, fixedGrid)) {
                     quit = true;
                 }
             }
             lastUpdate = nowTimer;
         }
 
-        placeTetromino(grid, fixedGrid, currentTetromino, startX, startY);
+        placeTetromino(grid, fixedGrid, currentTetromino, X, Y);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
@@ -420,9 +421,9 @@ int main(int argc, char** argv)
     bool quit_menu = false;
     while (!quit_menu) {
         SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                selected_item = 2; // Exit
+        while (SDL_PollEvent(&event)) { // MENU CHOICES
+            if (event.type == SDL_QUIT) { // EXIT SELECTED
+                selected_item = 2;
                 quit_menu = true;
             } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
@@ -444,7 +445,7 @@ int main(int argc, char** argv)
 
     if (selected_item != 2) {
         if (selected_item == 0) {
-            int game_width = (NB_BLOCS_W * BLOC_SIZE) + 500; // Widen for stats
+            int game_width = (NB_BLOCS_W * BLOC_SIZE) + 600;
             int game_height = (NB_BLOCS_H * BLOC_SIZE);
             int x_offset = (game_width - (NB_BLOCS_W * BLOC_SIZE)) / 2;
             init(game_width, game_height);
