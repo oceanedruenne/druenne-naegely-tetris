@@ -211,7 +211,7 @@ void run_player_vs_ai_game() {
         clock_gettime(CLOCK_MONOTONIC, &player_nowTimer);
         double player_elapsed = (player_nowTimer.tv_sec - player_lastUpdate.tv_sec) + (player_nowTimer.tv_nsec - player_lastUpdate.tv_nsec) / 1e9;
 
-        if (player_elapsed >= 0.5) { // Automatic fall
+        if (player_elapsed >= 0.5) { // Automatic tetromino fall
             if (canPlace(player_currentTetromino, player_X + 1, player_Y, player_fixedGrid)) {
                 player_X++;
             } else {
@@ -239,7 +239,7 @@ void run_player_vs_ai_game() {
         clock_gettime(CLOCK_MONOTONIC, &ai_nowTimer);
         double ai_elapsed = (ai_nowTimer.tv_sec - ai_lastUpdate.tv_sec) + (ai_nowTimer.tv_nsec - ai_lastUpdate.tv_nsec) / 1e9;
         
-        if (ai_elapsed >= 0.01) { // AI plays faster
+        if (ai_elapsed >= 0.1) { // AI plays faster
             char move = tetris_ai_play(ai_grid, ai_fixedGrid, ai_currentTetromino, &ai_X, &ai_Y);
             if (move == 'd') { // Right
                 if (canPlace(ai_currentTetromino, ai_X, ai_Y + 1, ai_fixedGrid)) ai_Y++;
