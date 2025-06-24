@@ -109,7 +109,6 @@ TetrominoColorCollection initTetrominoColorCollection() {
 }
 
 Tetromino getRandomTetromino(TetrominoCollection* collection) {
-    srand(time(NULL));
     int randomIndex = rand() % 7;
 
     switch (randomIndex) {
@@ -154,12 +153,17 @@ TetrominoColor getTetrominoColor(int color_number) {
     }
 }
 
-void printTetromino(Tetromino tetromino) {
-    printf("Tetromino type: %c\n", tetromino.type);
+void rotate_tetromino(Tetromino *tetromino) {
+    int temp[4][4];
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            printf("%d ", tetromino.shape[i][j]);
+            temp[i][j] = tetromino->shape[i][j];
         }
-        printf("\n");
+    }
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            tetromino->shape[i][j] = temp[3 - j][i];
+        }
     }
 }

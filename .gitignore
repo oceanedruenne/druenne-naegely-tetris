@@ -1,4 +1,6 @@
 # Ignore Visual Studio Code project files
 .vscode/
 
-
+# Ignore build and compiled files
+bin/
+build/

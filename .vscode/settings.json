@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "select.h": "c",
+        "aitetrisplayer.h": "c",
+        "stdio.h": "c",
+        "time.h": "c",
+        "ncurses.h": "c",
+        "string.h": "c"
+    },
+    "cmake.sourceDirectory": "/wsl.localhost/Ubuntu/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris"
+}
