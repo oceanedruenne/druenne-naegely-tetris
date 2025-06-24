@@ -1,6 +1,4 @@
 # Ignore Visual Studio Code project files
 .vscode/
 
-# Ignore compiled files
-*.o
 

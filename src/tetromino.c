@@ -109,6 +109,7 @@ TetrominoColorCollection initTetrominoColorCollection() {
 }
 
 Tetromino getRandomTetromino(TetrominoCollection* collection) {
+    srand(time(NULL));
     int randomIndex = rand() % 7;
 
     switch (randomIndex) {

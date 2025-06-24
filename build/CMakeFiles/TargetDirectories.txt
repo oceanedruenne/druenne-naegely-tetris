@@ -1,0 +1,3 @@
+/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles/TETRIS.dir
+/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles/edit_cache.dir
+/home/skullkrash/algorithmique/Tetris/druenne-naegely-tetris/build/CMakeFiles/rebuild_cache.dir
