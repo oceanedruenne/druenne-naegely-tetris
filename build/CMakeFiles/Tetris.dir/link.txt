@@ -1,1 +1,0 @@
-gcc CMakeFiles/Tetris.dir/src/main.c.o CMakeFiles/Tetris.dir/src/Tetromino.c.o -o Tetris 

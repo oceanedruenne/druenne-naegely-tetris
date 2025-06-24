@@ -153,8 +153,6 @@ void run_player_vs_ai_game() {
         return; // Initial game over check
     }
 
-    srand(time(NULL));
-
     while (!quit) {
         // --- EVENT HANDLING (PLAYER) ---
         SDL_Event event;
@@ -396,6 +394,8 @@ void run_single_player_game(int x_offset) {
 
 int main(int argc, char** argv)
 {
+    srand(time(NULL));
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0 || TTF_Init() == -1) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Initialization failed: %s %s", SDL_GetError(), TTF_GetError());
         return EXIT_FAILURE;
