@@ -131,16 +131,16 @@ void run_player_vs_ai_game() {
     // Player state
     int player_grid[NB_BLOCS_H][NB_BLOCS_W] = {0};
     int player_fixedGrid[NB_BLOCS_H][NB_BLOCS_W] = {0};
-    int player_startX = 0;
-    int player_startY = 3;
+    int player_X = 0;
+    int player_Y = 3;
     struct timespec player_lastUpdate;
     clock_gettime(CLOCK_MONOTONIC, &player_lastUpdate);
 
     // AI state
     int ai_grid[NB_BLOCS_H][NB_BLOCS_W] = {0};
     int ai_fixedGrid[NB_BLOCS_H][NB_BLOCS_W] = {0};
-    int ai_startX = 0;
-    int ai_startY = 3;
+    int ai_X = 0;
+    int ai_Y = 3;
     struct timespec ai_lastUpdate;
     clock_gettime(CLOCK_MONOTONIC, &ai_lastUpdate);
 
@@ -148,8 +148,8 @@ void run_player_vs_ai_game() {
     Tetromino player_currentTetromino = getRandomTetromino(&tetrominos);
     Tetromino ai_currentTetromino = getRandomTetromino(&tetrominos);
 
-    if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid) ||
-        !canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+    if (!canPlace(player_currentTetromino, player_X, player_Y, player_fixedGrid) ||
+        !canPlace(ai_currentTetromino, ai_X, ai_Y, ai_fixedGrid)) {
         return; // Initial game over check
     }
 
@@ -164,37 +164,37 @@ void run_player_vs_ai_game() {
                 switch (event.key.keysym.sym) {
                     case SDLK_q:
                     case SDLK_LEFT:
-                        if (canPlace(player_currentTetromino, player_startX, player_startY - 1, player_fixedGrid)) player_startY--;
+                        if (canPlace(player_currentTetromino, player_X, player_Y - 1, player_fixedGrid)) player_Y--;
                         break;
                     case SDLK_d:
                     case SDLK_RIGHT:
-                        if (canPlace(player_currentTetromino, player_startX, player_startY + 1, player_fixedGrid)) player_startY++;
+                        if (canPlace(player_currentTetromino, player_X, player_Y + 1, player_fixedGrid)) player_Y++;
                         break;
                     case SDLK_s:
                     case SDLK_DOWN:
-                        if (canPlace(player_currentTetromino, player_startX + 1, player_startY, player_fixedGrid)) player_startX++;
+                        if (canPlace(player_currentTetromino, player_X + 1, player_Y, player_fixedGrid)) player_Y++;
                         break;
                     case SDLK_x:
                     case SDLK_UP:
-                        try_rotate_tetromino(&player_currentTetromino, &player_startX, &player_startY, player_fixedGrid);
+                        try_rotate_tetromino(&player_currentTetromino, &player_X, &player_Y, player_fixedGrid);
                         break;
                     case SDLK_SPACE:
-                        while (canPlace(player_currentTetromino, player_startX + 1, player_startY, player_fixedGrid)) {
-                            player_startX++;
+                        while (canPlace(player_currentTetromino, player_X + 1, player_Y, player_fixedGrid)) {
+                            player_X++;
                         }
-                        freezeTetromino(player_fixedGrid, player_currentTetromino, player_startX, player_startY);
+                        freezeTetromino(player_fixedGrid, player_currentTetromino, player_X, player_Y);
                         int cleared_lines = clearLines(player_fixedGrid);
                         if (cleared_lines > 1) {
                             int garbage_to_send = (cleared_lines == 4) ? 4 : cleared_lines - 1;
                             add_garbage_lines(ai_fixedGrid, garbage_to_send);
-                            if (!canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+                            if (!canPlace(ai_currentTetromino, ai_X, ai_X, ai_fixedGrid)) {
                                 quit = true;
                             }
                         }
                         player_currentTetromino = getRandomTetromino(&tetrominos);
-                        player_startX = 0;
-                        player_startY = 3;
-                        if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid)) {
+                        player_X = 0;
+                        player_Y = 3;
+                        if (!canPlace(player_currentTetromino, player_X, player_Y, player_fixedGrid)) {
                             quit = true;
                         }
                         clock_gettime(CLOCK_MONOTONIC, &player_lastUpdate);
@@ -212,22 +212,22 @@ void run_player_vs_ai_game() {
         double player_elapsed = (player_nowTimer.tv_sec - player_lastUpdate.tv_sec) + (player_nowTimer.tv_nsec - player_lastUpdate.tv_nsec) / 1e9;
 
         if (player_elapsed >= 0.5) { // Automatic fall
-            if (canPlace(player_currentTetromino, player_startX + 1, player_startY, player_fixedGrid)) {
-                player_startX++;
+            if (canPlace(player_currentTetromino, player_X + 1, player_Y, player_fixedGrid)) {
+                player_X++;
             } else {
-                freezeTetromino(player_fixedGrid, player_currentTetromino, player_startX, player_startY);
+                freezeTetromino(player_fixedGrid, player_currentTetromino, player_X, player_Y);
                 int cleared_lines = clearLines(player_fixedGrid);
                 if (cleared_lines > 1) { // Send garbage for 2+ lines
                     int garbage_to_send = (cleared_lines == 4) ? 4 : cleared_lines - 1;
                     add_garbage_lines(ai_fixedGrid, garbage_to_send);
-                    if (!canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+                    if (!canPlace(ai_currentTetromino, ai_X, ai_Y, ai_fixedGrid)) {
                         quit = true; // AI loses due to garbage
                     }
                 }
                 player_currentTetromino = getRandomTetromino(&tetrominos);
-                player_startX = 0;
-                player_startY = 3;
-                if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid)) {
+                player_X = 0;
+                player_Y = 3;
+                if (!canPlace(player_currentTetromino, player_X, player_Y, player_fixedGrid)) {
                     quit = true; // Player loses
                 }
             }
@@ -240,32 +240,32 @@ void run_player_vs_ai_game() {
         double ai_elapsed = (ai_nowTimer.tv_sec - ai_lastUpdate.tv_sec) + (ai_nowTimer.tv_nsec - ai_lastUpdate.tv_nsec) / 1e9;
         
         if (ai_elapsed >= 0.01) { // AI plays faster
-            char move = tetris_ai_play(ai_grid, ai_fixedGrid, ai_currentTetromino, &ai_startX, &ai_startY);
+            char move = tetris_ai_play(ai_grid, ai_fixedGrid, ai_currentTetromino, &ai_X, &ai_Y);
             if (move == 'd') { // Right
-                if (canPlace(ai_currentTetromino, ai_startX, ai_startY + 1, ai_fixedGrid)) ai_startY++;
+                if (canPlace(ai_currentTetromino, ai_X, ai_Y + 1, ai_fixedGrid)) ai_Y++;
             } else if (move == 'q') { // Left
-                if (canPlace(ai_currentTetromino, ai_startX, ai_startY - 1, ai_fixedGrid)) ai_startY--;
+                if (canPlace(ai_currentTetromino, ai_X, ai_Y - 1, ai_fixedGrid)) ai_Y--;
             } else if (move == 'x') { // Rotate
                 Tetromino temp = ai_currentTetromino;
                 rotate_tetromino(&temp);
-                if (canPlace(temp, ai_startX, ai_startY, ai_fixedGrid)) ai_currentTetromino = temp;
+                if (canPlace(temp, ai_X, ai_Y, ai_fixedGrid)) ai_currentTetromino = temp;
             } else if (move == 's') { // Down
-                if (canPlace(ai_currentTetromino, ai_startX + 1, ai_startY, ai_fixedGrid)) {
-                    ai_startX++;
+                if (canPlace(ai_currentTetromino, ai_X + 1, ai_Y, ai_fixedGrid)) {
+                    ai_X++;
                 } else {
-                    freezeTetromino(ai_fixedGrid, ai_currentTetromino, ai_startX, ai_startY);
+                    freezeTetromino(ai_fixedGrid, ai_currentTetromino, ai_X, ai_Y);
                     int cleared_lines = clearLines(ai_fixedGrid);
                     if (cleared_lines > 1) { // Send garbage for 2+ lines
                         int garbage_to_send = (cleared_lines == 4) ? 4 : cleared_lines - 1;
                         add_garbage_lines(player_fixedGrid, garbage_to_send);
-                        if (!canPlace(player_currentTetromino, player_startX, player_startY, player_fixedGrid)) {
+                        if (!canPlace(player_currentTetromino, player_X, player_Y, player_fixedGrid)) {
                             quit = true; // Player loses due to garbage
                         }
                     }
                     ai_currentTetromino = getRandomTetromino(&tetrominos);
-                    ai_startX = 0;
-                    ai_startY = 3;
-                    if (!canPlace(ai_currentTetromino, ai_startX, ai_startY, ai_fixedGrid)) {
+                    ai_X = 0;
+                    ai_Y = 3;
+                    if (!canPlace(ai_currentTetromino, ai_X, ai_Y, ai_fixedGrid)) {
                         quit = true; // AI loses
                     }
                 }
@@ -274,8 +274,8 @@ void run_player_vs_ai_game() {
         }
 
         // --- RENDERING ---
-        placeTetromino(player_grid, player_fixedGrid, player_currentTetromino, player_startX, player_startY);
-        placeTetromino(ai_grid, ai_fixedGrid, ai_currentTetromino, ai_startX, ai_startY);
+        placeTetromino(player_grid, player_fixedGrid, player_currentTetromino, player_X, player_Y);
+        placeTetromino(ai_grid, ai_fixedGrid, ai_currentTetromino, ai_X, ai_Y);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
