@@ -21,7 +21,7 @@ TetrominoColorCollection tetrominos_color;
 SDL_Window* window;
 SDL_Renderer *renderer;
 TTF_Font *title_font;
-TTF_Font *menu_font;
+TTF_Font *general_font;
 
 void init(int width, int height)
 {
@@ -105,7 +105,7 @@ void render_game_info(SDL_Renderer* renderer, TTF_Font* font, GameState* state, 
     render_text(renderer, x_offset + (NB_BLOCS_W * BLOC_SIZE) + (x_offset - text_w) / 2, GAME_WINDOW_HEIGHT / 2 - text_h, text_buffer, font, white);
 }
 
-void render_menu(SDL_Renderer *renderer, TTF_Font *title_font, TTF_Font *menu_font, int selected_item, int window_width) {
+void render_menu(SDL_Renderer *renderer, TTF_Font *title_font, TTF_Font *general_font, int selected_item, int window_width) {
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color yellow = {255, 255, 0, 255};
 
@@ -118,8 +118,8 @@ void render_menu(SDL_Renderer *renderer, TTF_Font *title_font, TTF_Font *menu_fo
     const char *menu_items[] = {"Single Player", "Player vs AI", "Exit"};
     for (int i = 0; i < 3; i++) {
         SDL_Color color = (i == selected_item) ? yellow : white;
-        TTF_SizeText(menu_font, menu_items[i], &text_w, &text_h);
-        render_text(renderer, (window_width - text_w) / 2, 200 + i * 50, menu_items[i], menu_font, color);
+        TTF_SizeText(general_font, menu_items[i], &text_w, &text_h);
+        render_text(renderer, (window_width - text_w) / 2, 200 + i * 50, menu_items[i], general_font, color);
     }
 }
 
@@ -388,7 +388,7 @@ void run_single_player_game(int x_offset) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
         draw_grid(renderer, grid, x_offset);
-        render_game_info(renderer, menu_font, &game_state, x_offset);
+        render_game_info(renderer, general_font, &game_state, x_offset);
         SDL_RenderPresent(renderer);
     }
 }
@@ -407,8 +407,8 @@ int main(int argc, char** argv)
     init(menu_width, menu_height);
 
     title_font = TTF_OpenFont("../assets/font.ttf", 48);
-    menu_font = TTF_OpenFont("../assets/font.ttf", 24);
-    if (!title_font || !menu_font) {
+    general_font = TTF_OpenFont("../assets/font.ttf", 24);
+    if (!title_font || !general_font) {
         printf("Failed to load font: %s\n", TTF_GetError());
         TTF_Quit();
         SDL_Quit();
@@ -435,7 +435,7 @@ int main(int argc, char** argv)
         }
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
-        render_menu(renderer, title_font, menu_font, selected_item, menu_width);
+        render_menu(renderer, title_font, general_font, selected_item, menu_width);
         SDL_RenderPresent(renderer);
     }
 
@@ -460,7 +460,7 @@ int main(int argc, char** argv)
 
     // Clean up SDL resources
     TTF_CloseFont(title_font);
-    TTF_CloseFont(menu_font);
+    TTF_CloseFont(general_font);
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
