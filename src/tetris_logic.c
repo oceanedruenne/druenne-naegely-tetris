@@ -11,64 +11,6 @@
 #include "AITetrisPlayer.h"
 #include "tetromino.h"
 
-// Function for obtaining a key without blocking
-char getNonBlockingKey() {
-    struct termios oldt, newt;
-    char ch = 0;
-    char seq[3];
-
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-    struct timeval tv = {0L, 0L};
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-
-    if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0) {
-        if (read(STDIN_FILENO, &seq[0], 1) == 1) {
-            if (seq[0] == '\033') { // début séquence
-                if (read(STDIN_FILENO, &seq[1], 1) == 1 &&
-                    read(STDIN_FILENO, &seq[2], 1) == 1) {
-                    if (seq[1] == '[') {
-                        switch (seq[2]) {
-                            case 'B': ch = CHAR_DOWN; break;
-                            case 'C': ch = CHAR_RIGHT; break;
-                            case 'D': ch = CHAR_LEFT; break;
-                        }
-                    }
-                }
-            } else {
-                ch = seq[0]; 
-            }
-        }
-    }
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return ch;
-}
-
-
-// Function for displaying the game grid
-void displayGrid(int grid[NB_BLOCS_H][NB_BLOCS_W]) {
-
-    printf("\033[H\033[J");
-
-    for (int i = 0; i < NB_BLOCS_H; i++) {
-        for (int j = 0; j < NB_BLOCS_W; j++) {
-            if (grid[i][j] == 0) {
-                printf(". ");
-            } else {
-                printf("%d ", grid[i][j]);
-            } 
-        }
-
-        printf("\n");
-    }
-}
-
 // Function that checks whether a tetromino can be placed in the given position
 int canPlace(Tetromino tetromino, int startX, int startY, int fixedGrid[NB_BLOCS_H][NB_BLOCS_W]) {
     for (int i = 0; i < 4; i++) {

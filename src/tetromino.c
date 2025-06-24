@@ -153,16 +153,6 @@ TetrominoColor getTetrominoColor(int color_number) {
     }
 }
 
-void printTetromino(Tetromino tetromino) {
-    printf("Tetromino type: %c\n", tetromino.type);
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            printf("%d ", tetromino.shape[i][j]);
-        }
-        printf("\n");
-    }
-}
-
 void rotate_tetromino(Tetromino *tetromino) {
     int temp[4][4];
     for (int i = 0; i < 4; i++) {

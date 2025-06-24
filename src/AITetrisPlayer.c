@@ -1,31 +1,7 @@
 #include "AITetrisPlayer.h"
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h> // For abs
-
-// Forward declaration
-int evaluate_position(int grid[NB_BLOCS_H][NB_BLOCS_W]);
-
-// Tries to place a tetromino and returns a score. A high score is bad.
-int try_place_for_score(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W], Tetromino tetromino, int x, int y) {
-    int testGrid[NB_BLOCS_H][NB_BLOCS_W];
-    memcpy(testGrid, fixedGrid, sizeof(testGrid));
-
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            if (tetromino.shape[i][j] != 0) {
-                int newX = x + i;
-                int newY = y + j;
-                if (newX >= NB_BLOCS_H || newY < 0 || newY >= NB_BLOCS_W || testGrid[newX][newY] != 0) {
-                    return 999999; // Invalid move, return a very high score
-                }
-                testGrid[newX][newY] = tetromino.shape[i][j];
-            }
-        }
-    }
-    return evaluate_position(testGrid);
-}
-
+#include <stdlib.h>
 
 // Evaluates the grid state. Lower score is better.
 int evaluate_position(int grid[NB_BLOCS_H][NB_BLOCS_W]) {
@@ -93,7 +69,27 @@ int evaluate_position(int grid[NB_BLOCS_H][NB_BLOCS_W]) {
     return score;
 }
 
+// Tries to place a tetromino and returns a score. A high score is bad.
+int try_place_for_score(int fixedGrid[NB_BLOCS_H][NB_BLOCS_W], Tetromino tetromino, int x, int y) {
+    int testGrid[NB_BLOCS_H][NB_BLOCS_W];
+    memcpy(testGrid, fixedGrid, sizeof(testGrid));
 
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (tetromino.shape[i][j] != 0) {
+                int newX = x + i;
+                int newY = y + j;
+                if (newX >= NB_BLOCS_H || newY < 0 || newY >= NB_BLOCS_W || testGrid[newX][newY] != 0) {
+                    return 999999; // Invalid move, return a very high score
+                }
+                testGrid[newX][newY] = tetromino.shape[i][j];
+            }
+        }
+    }
+    return evaluate_position(testGrid);
+}
+
+// Main AI function that decides the best move for the tetromino
 char tetris_ai_play(int grid[NB_BLOCS_H][NB_BLOCS_W], int fixedGrid[NB_BLOCS_H][NB_BLOCS_W], Tetromino tetromino, int *startX, int *startY) {
     int bestScore = 999999;
     Tetromino bestTetromino = tetromino;
