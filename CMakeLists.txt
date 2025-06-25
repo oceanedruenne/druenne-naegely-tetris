@@ -19,11 +19,9 @@ include_directories(${SDL2_TTF_INCLUDE_DIRS})
 set(SOURCES
     src/main.c
     src/tetromino.c
-    src/tetromino.h
     src/tetris_logic.c
-    src/tetris_logic.h
     src/AITetrisPlayer.c
-    src/AITetrisPlayer.h
+    src/rendering.c
 )
 
 include_directories(src)
